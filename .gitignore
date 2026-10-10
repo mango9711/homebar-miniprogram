@@ -3,3 +3,5 @@ node_modules/
 .pai/
 .DS_Store
 project.private.config.json
+dist/
+dist-weapp/
