@@ -86,8 +86,8 @@ function MePage() {
       })
   }
 
-  const goBar = () => {
-    Taro.switchTab({ url: '/pages/bar/index' })
+  const goCabinet = () => {
+    Taro.switchTab({ url: '/pages/cabinet/index' })
   }
 
   const goCalendar = () => {
@@ -137,10 +137,10 @@ function MePage() {
           <Text className={styles.emptyEmoji}>🍸</Text>
           <Text className={styles.emptyText}>还没有调酒记录</Text>
           <Text className={styles.emptyHint}>
-            去 Bar 页勾选库存，调出第一杯吧
+            去「酒柜」维护好库存，就能调出第一杯了
           </Text>
-          <Text className={styles.emptyBtn} onClick={goBar}>
-            去选材料
+          <Text className={styles.emptyBtn} onClick={goCabinet}>
+            去备料
           </Text>
         </View>
       ) : (

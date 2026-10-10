@@ -1,0 +1,285 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0 $page-padding 48rpx;
+  background: linear-gradient(180deg, #eef0e6 0%, $color-bg-page 260rpx);
+}
+
+// ---------- Hero ----------
+.hero {
+  margin-top: $spacing-md;
+  padding: $spacing-lg;
+  border-radius: $radius-xl;
+  background: linear-gradient(140deg, $color-primary-dark 0%, $color-primary 55%, $color-primary-light 100%);
+  box-shadow: $shadow-card;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroTitle {
+  display: block;
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+  margin-bottom: $spacing-xs;
+}
+
+.heroSub {
+  display: block;
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: $line-height-normal;
+  margin-bottom: $spacing-md;
+}
+
+.heroRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heroStat {
+  display: flex;
+  align-items: baseline;
+}
+
+.heroStatNum {
+  font-size: 56rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-gold;
+  line-height: 1;
+  margin-right: $spacing-sm;
+}
+
+.heroStatLabel {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.heroGo {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  background: rgba(255, 255, 255, 0.16);
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-round;
+  white-space: nowrap;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+// ---------- 搜索与快捷操作 ----------
+.toolbar {
+  margin-top: $spacing-lg;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  height: 80rpx;
+  background: $color-bg-card;
+  border-radius: $radius-round;
+  padding: 0 $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.searchIcon {
+  font-size: $font-size-sm;
+  margin-right: $spacing-sm;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.quickRow {
+  display: flex;
+  margin-top: $spacing-md;
+}
+
+.quickBtn {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  background: #e3ece6;
+  padding: $spacing-xs $spacing-lg;
+  border-radius: $radius-round;
+  margin-right: $spacing-md;
+  white-space: nowrap;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.quickGhost {
+  background: transparent;
+  color: $color-text-tertiary;
+  border: 2rpx solid $color-border;
+}
+
+// ---------- 分类 ----------
+.catList {
+  margin-top: $spacing-lg;
+}
+
+.catCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  overflow: hidden;
+}
+
+.catHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $spacing-lg;
+}
+
+.catTitleBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.catName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.catHint {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.catRight {
+  display: flex;
+  align-items: center;
+}
+
+.catCount {
+  font-size: $font-size-xs;
+  color: $color-accent-dark;
+  background: #f5ecd6;
+  min-width: 40rpx;
+  text-align: center;
+  padding: 2rpx $spacing-xs;
+  border-radius: $radius-round;
+  margin-right: $spacing-sm;
+}
+
+.chevron {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+  transition: transform $transition-base;
+}
+
+.chevronDown {
+  transform: rotate(180deg);
+}
+
+.catBody {
+  padding: 0 $spacing-lg $spacing-lg;
+}
+
+.chipWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  background: $color-bg-hover;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-round;
+  margin: 0 $spacing-sm $spacing-sm 0;
+  white-space: nowrap;
+  border: 2rpx solid transparent;
+  transition: all $transition-fast;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.chipActive {
+  background: $color-primary;
+  color: $color-text-white;
+  border-color: $color-primary;
+}
+
+.chipCustom {
+  display: inline-flex;
+  align-items: center;
+  padding-right: $spacing-xs;
+}
+
+.chipDel {
+  margin-left: $spacing-xs;
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.chipCustom.chipActive .chipDel {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.addBox {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  text-align: center;
+}
+
+.addTitle {
+  display: block;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.addHint {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+  margin-bottom: $spacing-md;
+}
+
+.addCatWrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.addCatChip {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  background: #e3ece6;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-round;
+  margin: 0 $spacing-xs $spacing-sm;
+  white-space: nowrap;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.tip {
+  display: block;
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-lg;
+}

@@ -2,6 +2,7 @@ export default defineAppConfig({
   lazyCodeLoading: 'requiredComponents',
   pages: [
     'pages/bar/index',
+    'pages/cabinet/index',
     'pages/me/index',
     'pages/recipe/index',
     'pages/calendar/index'
@@ -24,6 +25,12 @@ export default defineAppConfig({
         text: 'Bar',
         iconPath: 'assets/tabbar/bar.png',
         selectedIconPath: 'assets/tabbar/bar-selected.png'
+      },
+      {
+        pagePath: 'pages/cabinet/index',
+        text: 'Wine Cabinet',
+        iconPath: 'assets/tabbar/cabinet.png',
+        selectedIconPath: 'assets/tabbar/cabinet-selected.png'
       },
       {
         pagePath: 'pages/me/index',

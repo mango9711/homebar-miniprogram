@@ -1,4 +1,4 @@
 export default definePageConfig({
-  navigationBarTitleText: '我的酒柜',
+  navigationBarTitleText: '调酒',
   enablePullDownRefresh: false
 })
