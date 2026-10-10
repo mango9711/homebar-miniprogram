@@ -94,6 +94,47 @@
   margin-left: $spacing-md;
 }
 
+// ---------- 口味问卷入口 ----------
+.quizCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-lg;
+  background: linear-gradient(120deg, #f7efd9 0%, #f3e6cf 100%);
+  box-shadow: $shadow-card;
+
+  &:active {
+    opacity: 0.88;
+  }
+}
+
+.quizInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.quizTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-accent-dark;
+}
+
+.quizSub {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.quizArrow {
+  flex-shrink: 0;
+  font-size: $font-size-md;
+  color: $color-accent-dark;
+  margin-left: $spacing-md;
+}
+
 // ---------- 生成按钮 ----------
 .generateBar {
   position: fixed;

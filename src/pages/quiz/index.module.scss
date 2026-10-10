@@ -1,0 +1,259 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0 $page-padding $spacing-xl;
+  background: linear-gradient(180deg, #eef0e6 0%, $color-bg-page 260rpx);
+}
+
+// ---------- 问答阶段 ----------
+.quizWrap {
+  padding-top: $spacing-lg;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progressText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  letter-spacing: 2rpx;
+}
+
+.progressTrack {
+  height: 8rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  margin-top: $spacing-sm;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: $radius-round;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+  transition: width $transition-base;
+}
+
+.question {
+  margin-top: $spacing-xl;
+}
+
+.qTitle {
+  display: block;
+  font-size: 44rpx;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  line-height: $line-height-tight;
+}
+
+.qHint {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.options {
+  margin-top: $spacing-lg;
+}
+
+.option {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-md;
+  border: 4rpx solid transparent;
+  box-shadow: $shadow-card;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.99);
+    opacity: 0.92;
+  }
+}
+
+.optionActive {
+  border-color: $color-primary;
+  background: #eaf3ee;
+}
+
+.optionLabel {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.optionSub {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 6rpx;
+  line-height: $line-height-normal;
+}
+
+.quizFooter {
+  display: flex;
+  justify-content: center;
+  margin-top: $spacing-lg;
+}
+
+.backLink {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  padding: $spacing-xs $spacing-md;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+// ---------- 结果阶段 ----------
+.result {
+  padding-top: $spacing-lg;
+}
+
+.resultHero {
+  padding: $spacing-lg;
+  border-radius: $radius-xl;
+  background: linear-gradient(140deg, $color-primary-dark 0%, $color-primary 55%, $color-primary-light 100%);
+  box-shadow: $shadow-card;
+}
+
+.resultTitle {
+  display: block;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+  line-height: $line-height-tight;
+}
+
+.resultSub {
+  display: block;
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: $line-height-normal;
+  margin-top: $spacing-xs;
+}
+
+.pathRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: $spacing-md;
+}
+
+.pathChip {
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 6rpx $spacing-md;
+  border-radius: $radius-round;
+  margin: 0 $spacing-sm $spacing-sm 0;
+}
+
+.invNotice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.invNoticeInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.invNoticeTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.invNoticeSub {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.invNoticeLink {
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: $color-primary;
+  white-space: nowrap;
+  margin-left: $spacing-md;
+}
+
+.hintCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-top: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.hintTitle {
+  display: block;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.hintRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-top: 2rpx solid $color-divider;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.hintName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+  margin-right: $spacing-md;
+}
+
+.hintMiss {
+  flex: 1;
+  font-size: $font-size-xs;
+  color: $color-error;
+  text-align: right;
+}
+
+.resultActions {
+  display: flex;
+  justify-content: center;
+  margin-top: $spacing-lg;
+}
+
+.againBtn {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  background: #e3ece6;
+  padding: $spacing-xs $spacing-xl;
+  border-radius: $radius-round;
+
+  &:active {
+    opacity: 0.85;
+  }
+}

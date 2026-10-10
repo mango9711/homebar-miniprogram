@@ -47,6 +47,10 @@ function BarPage() {
     Taro.switchTab({ url: '/pages/cabinet/index' })
   }
 
+  const goQuiz = () => {
+    Taro.navigateTo({ url: '/pages/quiz/index' })
+  }
+
   const openRecipe = (data: Scored) => {
     const { recipe } = data
     if (recipe.creative) {
@@ -153,6 +157,17 @@ function BarPage() {
         <Text className={styles.cabinetLink}>
           {selectedCount ? '去补货' : '去备料'} &gt;
         </Text>
+      </View>
+
+      {/* 口味问卷入口 */}
+      <View className={styles.quizCard} onClick={goQuiz}>
+        <View className={styles.quizInfo}>
+          <Text className={styles.quizTitle}>不知道喝什么？</Text>
+          <Text className={styles.quizSub}>
+            回答 4 道选择题，帮你挑出最合口味的一杯
+          </Text>
+        </View>
+        <Text className={styles.quizArrow}>&gt;</Text>
       </View>
 
       {/* 生成按钮 */}

@@ -6,6 +6,8 @@ import type {
 } from '@/types'
 import { RECIPES } from '@/data/recipes'
 import { isCustomId } from '@/data/categories'
+import { QUIZ_QUESTIONS } from '@/data/quiz'
+import type { QuizOption } from '@/data/quiz'
 
 type Inv = Record<string, boolean>
 type Custom = Record<string, Array<[string, string]>>
@@ -611,4 +613,65 @@ export function buildSnapshot(r: Recipe): Recipe {
     creative: r.creative,
     key: recipeKey(r)
   }
+}
+
+// ---------------------------------------------------------------------------
+// 口味问卷匹配
+// ---------------------------------------------------------------------------
+
+export interface QuizMatch extends Scored {
+  /** 与问卷选择的契合度，越高越合口味 */
+  fit: number
+}
+
+/** 命中一个偏好标签的加分 */
+const FIT_TAG_HIT = 3
+/** 命中一个「不想要」标签的减分 */
+const FIT_TAG_MISS = -3
+/** 酒精度落在期望档位的加分 / 落空的减分 */
+const FIT_STRENGTH_HIT = 3
+const FIT_STRENGTH_MISS = -2
+
+/**
+ * 根据问卷答卷给每款配方算契合度，并结合库存排序。
+ * 「都行」的题不参与加减分。
+ */
+export function matchByQuiz(
+  answers: Record<string, string>,
+  inv: Inv
+): QuizMatch[] {
+  const picked: QuizOption[] = []
+  QUIZ_QUESTIONS.forEach((q) => {
+    const opt = q.options.find((o) => o.id === answers[q.id])
+    if (opt && opt.id !== 'any') picked.push(opt)
+  })
+
+  return scoreRecipes(inv)
+    .map((s) => {
+      let fit = 0
+      picked.forEach((opt) => {
+        if (opt.tags && opt.tags.some((t) => s.recipe.tags.indexOf(t) !== -1)) {
+          fit += FIT_TAG_HIT
+        }
+        if (
+          opt.excludeTags &&
+          opt.excludeTags.some((t) => s.recipe.tags.indexOf(t) !== -1)
+        ) {
+          fit += FIT_TAG_MISS
+        }
+        if (opt.strengths) {
+          fit +=
+            opt.strengths.indexOf(s.recipe.strength) !== -1
+              ? FIT_STRENGTH_HIT
+              : FIT_STRENGTH_MISS
+        }
+      })
+      return { ...s, fit }
+    })
+    .sort(
+      (a, b) =>
+        b.fit - a.fit ||
+        a.score - b.score ||
+        (b.recipe.pop || 0) - (a.recipe.pop || 0)
+    )
 }

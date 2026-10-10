@@ -4,6 +4,7 @@ export default defineAppConfig({
     'pages/bar/index',
     'pages/cabinet/index',
     'pages/me/index',
+    'pages/quiz/index',
     'pages/recipe/index',
     'pages/calendar/index'
   ],
