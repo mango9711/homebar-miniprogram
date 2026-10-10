@@ -1,0 +1,16 @@
+'Log files:
+/Users/bytedance/Documents/trae_projects/water/homebar/.npm-cache/_logs/2026-10-08T06_20_35_810Z-debug-0.log
+
+# npm resolution error report
+
+While resolving: taro_template@1.0.0
+Found: webpack@5.78.0
+node_modules/webpack
+  dev webpack@"5.78.0" from the root project
+
+Could not resolve dependency:
+peer webpack@"5.91.0" from @tarojs/taro-loader@4.1.9
+node_modules/@tarojs/taro-loader
+  dev @tarojs/taro-loader@"4.1.9" from the root project
+
+Fix the upstream dependency conflict, or retry this command with --force or --legacy-peer-deps to accept an incorrect (and potentially broken) dependency resolution.

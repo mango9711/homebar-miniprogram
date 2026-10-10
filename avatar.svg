@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2c6149"/>
+      <stop offset="100%" stop-color="#1a3d2e"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8c778"/>
+      <stop offset="100%" stop-color="#c9a24b"/>
+    </linearGradient>
+    <clipPath id="squircle">
+      <rect x="60" y="60" width="680" height="680" rx="170" ry="170"/>
+    </clipPath>
+  </defs>
+
+  <!-- 背景 -->
+  <g clip-path="url(#squircle)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <!-- 柔和光晕 -->
+    <circle cx="400" cy="300" r="320" fill="#3a7d5e" opacity="0.22"/>
+  </g>
+
+  <!-- 马天尼杯 -->
+  <g fill="none" stroke="url(#glass)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 杯身（V型） -->
+    <path d="M195 240 L400 470 L605 240"/>
+    <!-- 杯口弧 -->
+    <path d="M195 240 Q400 290 605 240"/>
+    <!-- 杯柄 -->
+    <line x1="400" y1="470" x2="400" y2="555"/>
+    <!-- 杯底 -->
+    <line x1="315" y1="600" x2="485" y2="600"/>
+  </g>
+
+  <!-- 杯中液面（深绿鸡尾酒） -->
+  <path d="M248 262 Q400 312 552 262 L400 445 Z" fill="#214e3a" opacity="0.85"/>
+  <!-- 液面高光 -->
+  <path d="M275 265 Q400 300 525 265" fill="none" stroke="#5a9e7a" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- 橄榄 -->
+  <g>
+    <line x1="400" y1="200" x2="400" y2="262" stroke="#c9a24b" stroke-width="8" stroke-linecap="round"/>
+    <ellipse cx="400" cy="180" rx="28" ry="36" fill="#c9a24b"/>
+    <ellipse cx="400" cy="172" rx="10" ry="14" fill="#e8c778" opacity="0.7"/>
+  </g>
+</svg>

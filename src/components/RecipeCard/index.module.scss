@@ -1,0 +1,156 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  width: 100%;
+  box-sizing: border-box;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.92;
+    transform: scale(0.99);
+  }
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.index {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-accent-dark;
+  letter-spacing: 2rpx;
+}
+
+.badge {
+  font-size: $font-size-xs;
+  padding: 6rpx $spacing-sm;
+  border-radius: $radius-round;
+  white-space: nowrap;
+}
+
+.badgeOk {
+  background: #dcebe2;
+  color: $color-primary;
+}
+
+.badgeCreative {
+  background: #f1e6c9;
+  color: $color-accent-dark;
+}
+
+.badgeNear {
+  background: #f2d4cf;
+  color: $color-error;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: $spacing-xs;
+}
+
+.name {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.en {
+  margin-left: $spacing-sm;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  @include text-ellipsis;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: $spacing-sm;
+}
+
+.meta {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.metaDot {
+  margin: 0 $spacing-xs;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $spacing-sm;
+}
+
+.tag {
+  font-size: $font-size-xs;
+  padding: 4rpx $spacing-sm;
+  border-radius: $radius-xs;
+  margin: 0 $spacing-xs $spacing-xs 0;
+  white-space: nowrap;
+}
+
+.desc {
+  display: block;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  margin-bottom: $spacing-md;
+  @include text-ellipsis-multi(2);
+}
+
+.ingRow {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ing {
+  font-size: $font-size-xs;
+  padding: 4rpx $spacing-sm;
+  border-radius: $radius-xs;
+  margin: 0 $spacing-xs $spacing-xs 0;
+  white-space: nowrap;
+}
+
+.ingOk {
+  background: #eef3ef;
+  color: $color-primary;
+}
+
+.ingOptional {
+  background: $color-bg-hover;
+  color: $color-text-tertiary;
+}
+
+.ingMissing {
+  background: #f7e3e0;
+  color: $color-error;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 2rpx solid $color-divider;
+  padding-top: $spacing-sm;
+}
+
+.openBtn {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}

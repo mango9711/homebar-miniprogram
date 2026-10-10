@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- 背景渐变：中心明亮，四周温暖米白 -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f6f2e9"/>
+      <stop offset="100%" stop-color="#e8e2d2"/>
+    </radialGradient>
+
+    <!-- 酒液深度渐变：上方透亮，底部深邃 -->
+    <linearGradient id="liquidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3a8b66" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#214e3a" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0e241a" stop-opacity="1"/>
+    </linearGradient>
+
+    <!-- 液面表面反光 -->
+    <linearGradient id="surfaceGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4db887"/>
+      <stop offset="20%" stop-color="#214e3a"/>
+      <stop offset="80%" stop-color="#214e3a"/>
+      <stop offset="100%" stop-color="#142e22"/>
+    </linearGradient>
+
+    <!-- 玻璃杯壁反光渐变 -->
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+      <stop offset="20%" stop-color="rgba(255,255,255,0.1)"/>
+      <stop offset="80%" stop-color="rgba(255,255,255,0.1)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.6)"/>
+    </linearGradient>
+
+    <!-- 杯柄立体渐变 -->
+    <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+      <stop offset="30%" stop-color="rgba(200,200,200,0.2)"/>
+      <stop offset="70%" stop-color="rgba(200,200,200,0.2)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.8)"/>
+    </linearGradient>
+
+    <!-- 橄榄立体渐变 -->
+    <radialGradient id="oliveGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#f4dfa6"/>
+      <stop offset="40%" stop-color="#c9a24b"/>
+      <stop offset="90%" stop-color="#8a6e2e"/>
+      <stop offset="100%" stop-color="#59461b"/>
+    </radialGradient>
+    
+    <!-- 桌面投影 -->
+    <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(0,0,0,0.15)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </radialGradient>
+
+    <clipPath id="glassClip">
+      <path d="M170 230 L512 650 L854 230 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- 1. 背景 -->
+  <rect width="1024" height="1024" fill="url(#bgGrad)"/>
+
+  <!-- 2. 底部阴影投影 -->
+  <ellipse cx="512" cy="865" rx="240" ry="35" fill="url(#shadowGrad)"/>
+
+  <!-- 3. 后方杯壁 (透过液体看) -->
+  <ellipse cx="512" cy="230" rx="342" ry="55" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="4"/>
+
+  <!-- 4. 杯中深绿液体主体 -->
+  <path d="M250 350 L512 650 L774 350 Z" fill="url(#liquidGrad)"/>
+  
+  <!-- 5. 液体表面 (椭圆) -->
+  <ellipse cx="512" cy="350" rx="262" ry="40" fill="url(#surfaceGrad)"/>
+  
+  <!-- 液体表面高光轮廓 -->
+  <ellipse cx="512" cy="350" rx="258" ry="38" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+  <path d="M300 330 Q512 300 724 330" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- 6. 玻璃杯体 (V型杯身) -->
+  <!-- 整体杯壁光泽 -->
+  <path d="M170 230 L512 650 L854 230 Z" fill="url(#glassGrad)"/>
+  <!-- 杯壁外轮廓折射线 -->
+  <path d="M170 230 L512 650 L854 230" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="12" stroke-linejoin="round"/>
+  
+  <!-- 左侧强高光 -->
+  <path d="M200 250 L495 610" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="16" stroke-linecap="round"/>
+  <!-- 左侧次高光 -->
+  <path d="M230 255 L500 585" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- 右侧暗部反光 -->
+  <path d="M824 250 L529 610" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- 杯口边缘 (加粗立体感) -->
+  <ellipse cx="512" cy="230" rx="342" ry="55" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="12"/>
+  <!-- 杯口前侧高光 -->
+  <path d="M170 230 A342 55 0 0 0 854 230" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- 7. 橄榄与金属签 -->
+  <!-- 金属签 (斜插入水中) -->
+  <!-- 签子在水下的部分 (折射错位并降低透明度) -->
+  <path d="M480 350 L400 500" fill="none" stroke="#c9a24b" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+  <!-- 签子在水上的部分 -->
+  <path d="M660 80 L480 350" fill="none" stroke="#c9a24b" stroke-width="8" stroke-linecap="round"/>
+  <path d="M658 80 L478 350" fill="none" stroke="#f4dfa6" stroke-width="2" stroke-linecap="round"/> <!-- 签子高光 -->
+  
+  <!-- 签子顶部装饰小圆球 -->
+  <circle cx="660" cy="80" r="12" fill="url(#oliveGrad)"/>
+
+  <!-- 橄榄本体 (浸泡在液体表面处) -->
+  <g transform="translate(530, 270) rotate(-30)">
+    <!-- 橄榄阴影 -->
+    <ellipse cx="5" cy="5" rx="38" ry="48" fill="rgba(0,0,0,0.3)"/>
+    <!-- 橄榄球体 -->
+    <ellipse cx="0" cy="0" rx="38" ry="48" fill="url(#oliveGrad)"/>
+    <!-- 红心塞 -->
+    <ellipse cx="0" cy="-35" rx="14" ry="8" fill="#a32e2e"/>
+    <ellipse cx="0" cy="-38" rx="14" ry="4" fill="#d44242"/>
+    <!-- 橄榄高光 -->
+    <ellipse cx="-15" cy="-10" rx="6" ry="12" fill="rgba(255,255,255,0.6)" transform="rotate(20)"/>
+  </g>
+
+  <!-- 8. 杯柄与底座 -->
+  <!-- 杯柄阴影与反光 -->
+  <rect x="495" y="640" width="34" height="210" fill="url(#stemGrad)"/>
+  <!-- 杯柄左侧高光 -->
+  <line x1="498" y1="650" x2="498" y2="840" stroke="rgba(255,255,255,0.9)" stroke-width="6"/>
+  
+  <!-- 玻璃底座 -->
+  <!-- 底座后侧 -->
+  <ellipse cx="512" cy="850" rx="180" ry="25" fill="rgba(255,255,255,0.4)"/>
+  <!-- 底座厚度 -->
+  <path d="M332 850 L332 860 A180 25 0 0 0 692 860 L692 850 Z" fill="rgba(200,200,200,0.3)"/>
+  <!-- 底座前侧高光边缘 -->
+  <path d="M332 850 A180 25 0 0 0 692 850" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="8"/>
+  <path d="M350 858 A160 20 0 0 0 674 858" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="4"/>
+</svg>

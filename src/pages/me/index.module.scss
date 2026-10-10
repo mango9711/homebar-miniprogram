@@ -1,0 +1,521 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: $spacing-md $page-padding $spacing-xl;
+  background: linear-gradient(180deg, #eef0e6 0%, $color-bg-page 240rpx);
+}
+
+// ---------- 个人信息 ----------
+.profileCard {
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.avatarBtn {
+  position: relative;
+  width: 128rpx;
+  height: 128rpx;
+  margin-right: $spacing-lg;
+  padding: 0;
+  background: transparent;
+  border-radius: $radius-round;
+  overflow: visible;
+
+  &::after {
+    border: none;
+  }
+}
+
+.avatar {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: $radius-round;
+  box-sizing: border-box;
+}
+
+.avatarFallback {
+  width: 128rpx;
+  height: 128rpx;
+  line-height: 128rpx;
+  text-align: center;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  color: #fff;
+  font-size: 48rpx;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 4rpx 16rpx rgba(253, 160, 133, 0.3);
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.nameRow {
+  display: flex;
+  align-items: baseline;
+}
+
+.nickname {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  max-width: 400rpx;
+  line-height: 1.2;
+}
+
+.editIconWrapper {
+  width: 40rpx;
+  height: 40rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4rpx;
+  
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.editIconPen {
+  width: 20rpx;
+  height: 8rpx;
+  border: 3rpx solid #b0b0b0;
+  border-left: none;
+  border-radius: 0 3rpx 3rpx 0;
+  position: relative;
+  transform: rotate(-45deg);
+  margin-bottom: 2rpx;
+  margin-left: 2rpx;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -6rpx;
+    top: -4rpx;
+    width: 0;
+    height: 0;
+    border-top: 5rpx solid transparent;
+    border-bottom: 5rpx solid transparent;
+    border-right: 6rpx solid #b0b0b0;
+  }
+}
+
+.drinkCount {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: 8rpx;
+}
+
+// ---------- 列表 ----------
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40rpx;
+  margin-bottom: $spacing-md;
+}
+
+.listTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.calendarMore {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  display: flex;
+  align-items: center;
+  
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.moreIcon {
+  margin-left: 4rpx;
+  font-family: monospace;
+}
+
+.calPhoto {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.6;
+}
+
+.calPhotoWrapper, .calIconWrapper {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-round;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.calIcon {
+  font-size: 56rpx;
+  opacity: 0.5;
+}
+
+.calDateOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: $font-size-md;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.6);
+  font-weight: $font-weight-bold;
+  z-index: 2;
+}
+
+.calDateOverlayIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: $font-size-md;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.6);
+  font-weight: $font-weight-bold;
+  z-index: 2;
+}
+
+.emptyBox {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: $shadow-card;
+}
+
+.emptyEmoji {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.emptyHint {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+  margin-bottom: $spacing-lg;
+}
+
+.emptyBtn {
+  font-size: $font-size-md;
+  color: $color-text-white;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  padding: $spacing-sm $spacing-xl;
+  white-space: nowrap;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.recordCard {
+  position: relative;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.recordHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.recordName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  line-height: 48rpx;
+  @include text-ellipsis;
+  padding-right: 60rpx; /* 防止过长的标题挡住删除按钮 */
+}
+
+.deleteBtn {
+  position: absolute;
+  top: $spacing-lg;
+  right: $spacing-lg;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  padding: 0;
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.deleteIconLid {
+  width: 18rpx;
+  height: 3rpx;
+  background-color: #b0b0b0;
+  border-radius: 2rpx;
+  position: relative;
+  margin-bottom: 3rpx;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -4rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8rpx;
+    height: 3rpx;
+    background-color: #b0b0b0;
+    border-radius: 2rpx;
+  }
+}
+
+.deleteIconBin {
+  width: 14rpx;
+  height: 16rpx;
+  border: 2rpx solid #b0b0b0;
+  border-top: none;
+  border-radius: 0 0 4rpx 4rpx;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2rpx;
+    width: 2rpx;
+    height: 10rpx;
+    background-color: #b0b0b0;
+    border-radius: 1rpx;
+  }
+
+  &::before {
+    left: 3rpx;
+  }
+
+  &::after {
+    right: 3rpx;
+  }
+}
+
+.recordMeta {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.ratingPill {
+  font-size: $font-size-xs;
+  padding: 4rpx $spacing-md;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.date {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-left: $spacing-md;
+}
+
+.note {
+  display: block;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  margin-bottom: $spacing-sm;
+  @include text-ellipsis-multi(3);
+}
+
+.photoGrid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $spacing-sm;
+}
+
+.photoItem {
+  width: calc((100% - 34rpx) / 3);
+  height: 196rpx;
+  border-radius: $radius-md;
+  margin-right: 17rpx;
+  margin-bottom: 17rpx;
+
+  &:nth-child(3n) {
+    margin-right: 0;
+  }
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.expandBtn {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  white-space: nowrap;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+// ---------- 快照 ----------
+.snapshotBox {
+  margin-top: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.snapSection {
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.snapIng {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-xs 0;
+}
+
+.snapIngName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  flex: 1;
+  @include text-ellipsis;
+}
+
+.snapOptional {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.snapIngAmount {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  white-space: nowrap;
+  margin-left: $spacing-md;
+}
+
+.snapGarnish {
+  display: block;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  padding: $spacing-sm 0;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.snapSteps {
+  padding-top: $spacing-sm;
+}
+
+.snapStep {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-xs 0;
+}
+
+.snapStepNo {
+  flex-shrink: 0;
+  width: 36rpx;
+  height: 36rpx;
+  line-height: 36rpx;
+  text-align: center;
+  border-radius: $radius-round;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  margin-right: $spacing-sm;
+}
+
+.snapStepText {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+// ---------- 昵称编辑弹层 ----------
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nameModal {
+  width: 600rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-popup;
+}
+
+.nameModalTitle {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.nameModalInput {
+  width: 100%;
+  box-sizing: border-box;
+  height: $button-height-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: 0 $spacing-lg;
+  font-size: $font-size-md;
+  margin-bottom: $spacing-md;
+}
+
+.nameHint {
+  display: block;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  text-align: center;
+  margin-bottom: $spacing-sm;
+}

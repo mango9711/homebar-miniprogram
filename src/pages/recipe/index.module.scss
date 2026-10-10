@@ -1,0 +1,516 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: $spacing-md $page-padding $spacing-xl;
+}
+
+.notFound {
+  padding: $spacing-xl $spacing-lg;
+}
+
+.notFoundText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  text-align: center;
+}
+
+// ---------- Hero ----------
+.hero {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: $spacing-sm;
+}
+
+.name {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.en {
+  margin-left: $spacing-sm;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  @include text-ellipsis;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.meta {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.metaDot {
+  margin: 0 $spacing-xs;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $spacing-sm;
+}
+
+.tag {
+  font-size: $font-size-xs;
+  padding: 4rpx $spacing-sm;
+  border-radius: $radius-xs;
+  margin: 0 $spacing-xs $spacing-xs 0;
+  white-space: nowrap;
+}
+
+.desc {
+  display: block;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+// ---------- Section ----------
+.section {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.stepperBox {
+  display: flex;
+  align-items: center;
+  background: $color-bg-page;
+  border-radius: $radius-round;
+  padding: 4rpx;
+}
+
+.stepperBtn {
+  width: 52rpx;
+  height: 52rpx;
+  line-height: 48rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: $color-text-primary;
+  background: #fff;
+  border-radius: $radius-round;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.stepperBtnDisabled {
+  color: $color-text-tertiary;
+  background: transparent;
+  box-shadow: none;
+  
+  &:active {
+    opacity: 1;
+  }
+}
+
+.stepperValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin: 0 $spacing-sm;
+  display: flex;
+  align-items: baseline;
+}
+
+.stepperDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  font-weight: normal;
+  margin-left: 4rpx;
+}
+
+.progress {
+  font-size: $font-size-sm;
+  color: $color-accent-dark;
+  font-weight: $font-weight-medium;
+}
+
+.ingList {
+  border-top: 2rpx solid $color-divider;
+}
+
+.ingItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.ingName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  flex: 1;
+  @include text-ellipsis;
+}
+
+.optionalTag {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.ingAmount {
+  font-size: $font-size-md;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+  margin-left: $spacing-md;
+}
+
+.garnishBox {
+  display: flex;
+  align-items: center;
+  margin-top: $spacing-md;
+}
+
+.garnishLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-right: $spacing-md;
+}
+
+.garnishText {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+// ---------- 步骤 ----------
+.stepItem {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-sm 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.stepNo {
+  flex-shrink: 0;
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-right: $spacing-md;
+}
+
+.stepNoDone {
+  background: $color-primary;
+  color: $color-text-white;
+}
+
+.stepText {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.stepDone .stepText {
+  color: $color-text-tertiary;
+}
+
+// ---------- 我的记录 ----------
+.recordBox {
+  margin-top: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.recordTop {
+  display: flex;
+  margin-bottom: $spacing-sm;
+}
+
+.ratingPill {
+  font-size: $font-size-sm;
+  padding: 4rpx $spacing-md;
+  border-radius: $radius-round;
+  white-space: nowrap;
+}
+
+.noteText {
+  display: block;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.noteEmpty {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: $spacing-sm;
+}
+
+.markBtn {
+  display: block;
+  margin-top: $spacing-lg;
+  height: $button-height-md;
+  line-height: $button-height-md;
+  text-align: center;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.92;
+  }
+}
+
+.footerHint {
+  display: block;
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  padding: $spacing-sm 0;
+}
+
+// ---------- 弹层 ----------
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+.modal {
+  width: 100%;
+  background: $color-bg-card;
+  border-radius: $radius-xl $radius-xl 0 0;
+  padding: $spacing-lg;
+  padding-bottom: calc($spacing-xl + env(safe-area-inset-bottom));
+  box-shadow: $shadow-popup;
+}
+
+.modalTitle {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.modalLabel {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+}
+
+.ratingRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $spacing-lg;
+}
+
+.ratingOption {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  background: $color-bg-hover;
+  border: 2rpx solid transparent;
+  border-radius: $radius-round;
+  padding: $spacing-xs $spacing-md;
+  margin: 0 $spacing-sm $spacing-sm 0;
+  white-space: nowrap;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.ratingOptionActive {
+  font-weight: $font-weight-medium;
+}
+
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 160rpx;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  line-height: $line-height-normal;
+  margin-bottom: $spacing-lg;
+}
+
+// ---------- 照片 ----------
+.photoStrip {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: $spacing-sm;
+}
+
+.photoThumb {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: $radius-sm;
+  margin: 0 $spacing-sm $spacing-sm 0;
+
+  &:active {
+    opacity: 0.85;
+  }
+}
+
+.photoLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.photoCount {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.photoGrid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $spacing-lg;
+}
+
+.photoCell,
+.photoAdd {
+  width: calc((100% - 34rpx) / 3);
+  height: 196rpx;
+  border-radius: $radius-md;
+  margin-right: 17rpx;
+  margin-bottom: 17rpx;
+  box-sizing: border-box;
+
+  &:nth-child(3n) {
+    margin-right: 0;
+  }
+}
+
+.photoCell {
+  position: relative;
+}
+
+.photoImg {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-md;
+}
+
+.photoRemove {
+  position: absolute;
+  top: -12rpx;
+  right: -12rpx;
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 36rpx;
+  text-align: center;
+  border-radius: $radius-round;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 28rpx;
+}
+
+.photoAdd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-page;
+  border: 2rpx dashed #c4cfc8;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.photoAddIcon {
+  font-size: 52rpx;
+  color: $color-text-tertiary;
+  line-height: 1;
+}
+
+.photoAddText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.modalActions {
+  display: flex;
+}
+
+.modalBtn {
+  flex: 1;
+  height: $button-height-md;
+  line-height: $button-height-md;
+  text-align: center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  white-space: nowrap;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.modalCancel {
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+  margin-right: $spacing-md;
+}
+
+.modalSave {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
