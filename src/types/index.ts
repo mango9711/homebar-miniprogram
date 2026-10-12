@@ -56,7 +56,7 @@ export interface UserProfile {
   openid?: string
 }
 
-export type GenerateMode = 'perfect' | 'creative' | 'empty'
+export type GenerateMode = 'perfect' | 'creative' | 'mixed' | 'empty'
 
 export interface GenerateResult {
   mode: GenerateMode

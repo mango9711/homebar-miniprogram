@@ -513,23 +513,34 @@ export function planGenerate(inv: Inv, custom: Custom, NAME: NameMap): GenerateR
     .filter((s) => s.score > 0)
     .sort((a, b) => a.score - b.score || (b.recipe.pop || 0) - (a.recipe.pop || 0))
 
-  if (perfect.length > 0) {
-    return {
-      mode: 'perfect',
-      title: '今晚，这几杯用你酒柜里的材料就能调',
-      sub: `共匹配 ${perfect.length} 款配方，全部原料均来自你勾选的库存`,
-      cards: perfect,
-      near: []
-    }
-  }
-
   const creative = buildCreativeRecipes(inv, custom, NAME)
-  if (creative.length) {
+  const creativeCards = creative.map((recipe) => ({ recipe, missing: [], score: 0 }))
+
+  const allPerfect = [...perfect, ...creativeCards]
+
+  if (allPerfect.length > 0) {
+    const hasClassic = perfect.length > 0
+    const hasCreative = creativeCards.length > 0
+
+    let title = '今晚，这几杯用你酒柜里的材料就能调'
+    let sub = `共匹配 ${perfect.length} 款配方，全部原料均来自你勾选的库存`
+    let mode: 'perfect' | 'creative' | 'mixed' = 'perfect'
+
+    if (hasClassic && hasCreative) {
+      title = '今晚，为你准备了这些经典与创意特调'
+      sub = `匹配 ${perfect.length} 款经典，同时生成 ${creativeCards.length} 款创意特调`
+      mode = 'mixed'
+    } else if (hasCreative && !hasClassic) {
+      title = '经典配方凑不齐？先用酒柜里的材料调这几杯'
+      sub = '以下创意特调全部由你勾选的材料组合而成，用量可按口味微调'
+      mode = 'creative'
+    }
+
     return {
-      mode: 'creative',
-      title: '经典配方凑不齐？先用酒柜里的材料调这几杯',
-      sub: '以下创意特调全部由你勾选的材料组合而成，用量可按口味微调',
-      cards: creative.map((recipe) => ({ recipe, missing: [], score: 0 })),
+      mode,
+      title,
+      sub,
+      cards: allPerfect,
       near: near.slice(0, 3)
     }
   }

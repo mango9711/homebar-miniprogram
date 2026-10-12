@@ -3,10 +3,17 @@ export default defineAppConfig({
   pages: [
     'pages/bar/index',
     'pages/cabinet/index',
-    'pages/me/index',
-    'pages/quiz/index',
-    'pages/recipe/index',
-    'pages/calendar/index'
+    'pages/me/index'
+  ],
+  subPackages: [
+    {
+      root: 'subpages',
+      pages: [
+        'quiz/index',
+        'recipe/index',
+        'calendar/index'
+      ]
+    }
   ],
   window: {
     backgroundTextStyle: 'dark',
@@ -29,7 +36,7 @@ export default defineAppConfig({
       },
       {
         pagePath: 'pages/cabinet/index',
-        text: 'Wine Cabinet',
+        text: 'Cabinet',
         iconPath: 'assets/tabbar/cabinet.png',
         selectedIconPath: 'assets/tabbar/cabinet-selected.png'
       },

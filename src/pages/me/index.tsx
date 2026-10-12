@@ -91,7 +91,7 @@ function MePage() {
   }
 
   const goCalendar = () => {
-    Taro.navigateTo({ url: '/pages/calendar/index' })
+    Taro.navigateTo({ url: '/subpages/calendar/index' })
   }
 
   return (

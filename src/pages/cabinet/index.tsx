@@ -95,6 +95,22 @@ function CabinetPage() {
     Taro.switchTab({ url: '/pages/bar/index' })
   }
 
+  const generateAndGo = () => {
+    if (!selectedCount) {
+      Taro.showModal({
+        title: '酒柜还是空的',
+        content: '请先勾选家里现有的材料，再生成调酒清单',
+        confirmText: '知道了',
+        showCancel: false
+      }).catch((e) => {
+        console.error('[Cabinet] showModal failed:', e)
+      })
+      return
+    }
+    Taro.setStorageSync('should_generate_cocktails', '1')
+    goBar()
+  }
+
   return (
     <View className={styles.page} style={h5BottomStyle}>
       {/* 顶部 Hero */}
@@ -108,9 +124,6 @@ function CabinetPage() {
             <Text className={styles.heroStatNum}>{selectedCount}</Text>
             <Text className={styles.heroStatLabel}>样已备材料</Text>
           </View>
-          <Text className={styles.heroGo} onClick={goBar}>
-            去调酒 →
-          </Text>
         </View>
       </View>
 
@@ -120,7 +133,7 @@ function CabinetPage() {
           <Text className={styles.searchIcon}>🔍</Text>
           <Input
             className={styles.searchInput}
-            placeholder='搜索原料，如：金酒、薄荷、可乐'
+            placeholder='搜索或新增原料'
             value={keyword}
             onInput={onSearchInput}
             confirmType='search'
@@ -252,6 +265,13 @@ function CabinetPage() {
       <Text className={styles.tip}>
         库存会保存在本机，下次打开无需重新设置
       </Text>
+
+      {/* 生成按钮 */}
+      <View className={styles.generateBar} style={h5BottomStyle}>
+        <Text className={styles.generateBtn} onClick={generateAndGo}>
+          生成调酒清单
+        </Text>
+      </View>
     </View>
   )
 }

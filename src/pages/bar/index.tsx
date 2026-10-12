@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useRef } from 'react'
 import { View, Text } from '@tarojs/components'
+import { useDidShow } from '@tarojs/taro'
 import Taro from '@tarojs/taro'
 import useBarStore from '@/store/useBarStore'
 import RecipeCard from '@/components/RecipeCard'
@@ -22,9 +23,8 @@ function shuffleList<T>(list: T[]): T[] {
 const IS_H5 = process.env.TARO_ENV === 'h5'
 const h5BarStyle = IS_H5
   ? {
-      bottom:
-        'calc(var(--taro-tabbar-height, 50px) + env(safe-area-inset-bottom))',
-      paddingBottom: '24rpx'
+      paddingBottom:
+        'calc(var(--taro-tabbar-height, 50px) + env(safe-area-inset-bottom) + 48rpx)'
     }
   : {}
 
@@ -43,44 +43,46 @@ function BarPage() {
     [inv]
   )
 
+  const prevInvRef = useRef<string>('')
+
+  useDidShow(() => {
+    Taro.removeStorageSync('should_generate_cocktails')
+    const currentState = JSON.stringify({ inv, custom })
+    if (currentState !== prevInvRef.current || !result) {
+      generate()
+      prevInvRef.current = currentState
+    }
+  })
+
   const goCabinet = () => {
     Taro.switchTab({ url: '/pages/cabinet/index' })
   }
 
   const goQuiz = () => {
-    Taro.navigateTo({ url: '/pages/quiz/index' })
+    Taro.navigateTo({ url: '/subpages/quiz/index' })
   }
 
   const openRecipe = (data: Scored) => {
     const { recipe } = data
     if (recipe.creative) {
       Taro.navigateTo({
-        url: `/pages/recipe/index?id=${recipeKey(recipe)}&creative=1`
+        url: `/subpages/recipe/index?id=${recipeKey(recipe)}&creative=1`
       })
     } else {
-      Taro.navigateTo({ url: `/pages/recipe/index?id=${recipe.id}` })
+      Taro.navigateTo({ url: `/subpages/recipe/index?id=${recipe.id}` })
     }
   }
 
   const generate = () => {
     if (!selectedCount) {
-      Taro.showModal({
-        title: '酒柜还是空的',
-        content: '先去「酒柜」勾选家里现有的材料，再回来调酒',
-        confirmText: '去酒柜',
-        cancelText: '知道了'
-      })
-        .then((res) => {
-          if (res.confirm) goCabinet()
-        })
-        .catch((e) => {
-          console.error('[Bar] showModal failed:', e)
-        })
+      setResult(null)
+      setShown([])
       return
     }
     const r = planGenerate(inv, custom, names)
-    if (r.mode === 'creative') {
-      setCreativeRecipes(r.cards.map((s) => s.recipe))
+    const creativeOnly = r.cards.map((s) => s.recipe).filter((r) => r.creative)
+    if (creativeOnly.length > 0) {
+      setCreativeRecipes(creativeOnly)
     }
     setResult(r)
     setShown(r.cards.slice(0, 3))
@@ -131,51 +133,12 @@ function BarPage() {
   const canShuffle = !!result && result.cards.length > shown.length
 
   return (
-    <View className={styles.page}>
-      {/* 顶部 Hero */}
-      <View className={styles.hero}>
-        <Text className={styles.heroTitle}>今晚喝什么</Text>
-        <Text className={styles.heroSub}>
-          可调的品类会随「酒柜」里的原料库存自动更新
-        </Text>
-        <View className={styles.heroStat}>
-          <Text className={styles.heroStatNum}>{makeableCount}</Text>
-          <Text className={styles.heroStatLabel}>款经典配方现在就能调</Text>
+    <View className={styles.page} style={h5BarStyle}>
+      {!selectedCount && (
+        <View className={styles.emptyNotice} onClick={goCabinet}>
+          <Text className={styles.emptyNoticeTitle}>当前酒柜没有库存，去补货 &gt;</Text>
         </View>
-      </View>
-
-      {/* 酒柜库存概览 */}
-      <View className={styles.cabinetRow} onClick={goCabinet}>
-        <View className={styles.cabinetInfo}>
-          <Text className={styles.cabinetTitle}>酒柜库存</Text>
-          <Text className={styles.cabinetSub}>
-            {selectedCount
-              ? `已备 ${selectedCount} 样材料`
-              : '还没有备料，点这里去勾选'}
-          </Text>
-        </View>
-        <Text className={styles.cabinetLink}>
-          {selectedCount ? '去补货' : '去备料'} &gt;
-        </Text>
-      </View>
-
-      {/* 口味问卷入口 */}
-      <View className={styles.quizCard} onClick={goQuiz}>
-        <View className={styles.quizInfo}>
-          <Text className={styles.quizTitle}>不知道喝什么？</Text>
-          <Text className={styles.quizSub}>
-            回答 4 道选择题，帮你挑出最合口味的一杯
-          </Text>
-        </View>
-        <Text className={styles.quizArrow}>&gt;</Text>
-      </View>
-
-      {/* 生成按钮 */}
-      <View className={styles.generateBar} style={h5BarStyle}>
-        <Text className={styles.generateBtn} onClick={generate}>
-          生成调酒清单
-        </Text>
-      </View>
+      )}
 
       {/* 结果区 */}
       {result && (
@@ -185,12 +148,18 @@ function BarPage() {
               <Text className={styles.resultTitle}>{result.title}</Text>
               <Text className={styles.resultSub}>{result.sub}</Text>
             </View>
-            {canShuffle && (
-              <View className={styles.shufflePill} onClick={shuffle}>
-                <Text className={styles.shuffleIcon}>⟳</Text>
-                <Text className={styles.shuffleText}>换一换</Text>
+            <View className={styles.actionRow}>
+              {canShuffle && (
+                <View className={styles.actionPill} onClick={shuffle}>
+                  <Text className={styles.actionIcon}>⟳</Text>
+                  <Text className={styles.actionText}>换一换</Text>
+                </View>
+              )}
+              <View className={styles.actionPill} onClick={goQuiz}>
+                <Text className={styles.actionIcon}>✧</Text>
+                <Text className={styles.actionText}>帮我选</Text>
               </View>
-            )}
+            </View>
           </View>
 
           {shown.map((data, idx) => (
@@ -214,7 +183,7 @@ function BarPage() {
                   className={styles.hintRow}
                   onClick={() =>
                     Taro.navigateTo({
-                      url: `/pages/recipe/index?id=${s.recipe.id}`
+                      url: `/subpages/recipe/index?id=${s.recipe.id}`
                     })
                   }
                 >

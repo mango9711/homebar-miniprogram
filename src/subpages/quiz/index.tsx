@@ -72,8 +72,8 @@ function QuizPage() {
     Taro.switchTab({ url: '/pages/cabinet/index' })
   }
 
-  const openRecipe = (data: Scored) => {
-    Taro.navigateTo({ url: `/pages/recipe/index?id=${data.recipe.id}` })
+  const openRecipe = (data: QuizMatch) => {
+    Taro.navigateTo({ url: `/subpages/recipe/index?id=${data.recipe.id}` })
   }
 
   const missText = (missing: string[]) => {

@@ -119,10 +119,11 @@
 }
 
 .resultHero {
-  padding: $spacing-lg;
+  padding: $spacing-xl $spacing-lg;
   border-radius: $radius-xl;
   background: linear-gradient(140deg, $color-primary-dark 0%, $color-primary 55%, $color-primary-light 100%);
   box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
 }
 
 .resultTitle {

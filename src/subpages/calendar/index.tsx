@@ -96,7 +96,7 @@ function CalendarPage() {
         if (record) {
           const isCreative = record.key.startsWith('cre_')
           Taro.navigateTo({
-            url: `/pages/recipe/index?id=${record.key}&creative=${isCreative ? '1' : '0'}`
+            url: `/subpages/recipe/index?id=${record.key}&creative=${isCreative ? '1' : '0'}`
           })
         }
       }

@@ -3,171 +3,30 @@
 .page {
   min-height: 100vh;
   box-sizing: border-box;
-  padding: 0 $page-padding 200rpx;
+  padding: 0 $page-padding 48rpx;
   background: linear-gradient(180deg, #eef0e6 0%, $color-bg-page 260rpx);
-}
-
-// ---------- Hero ----------
-.hero {
-  margin-top: $spacing-md;
-  padding: $spacing-lg;
-  border-radius: $radius-xl;
-  background: linear-gradient(140deg, $color-primary-dark 0%, $color-primary 55%, $color-primary-light 100%);
-  box-shadow: $shadow-card;
-  position: relative;
-  overflow: hidden;
-}
-
-.heroTitle {
-  display: block;
-  font-size: $font-size-xxl;
-  font-weight: $font-weight-semibold;
-  color: $color-text-white;
-  margin-bottom: $spacing-xs;
-}
-
-.heroSub {
-  display: block;
-  font-size: $font-size-sm;
-  color: rgba(255, 255, 255, 0.78);
-  line-height: $line-height-normal;
-  margin-bottom: $spacing-md;
-}
-
-.heroStat {
-  display: flex;
-  align-items: baseline;
-}
-
-.heroStatNum {
-  font-size: 56rpx;
-  font-weight: $font-weight-bold;
-  color: $color-text-gold;
-  line-height: 1;
-  margin-right: $spacing-sm;
-}
-
-.heroStatLabel {
-  font-size: $font-size-sm;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-// ---------- 酒柜库存概览 ----------
-.cabinetRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: $spacing-lg;
-  padding: $spacing-md $spacing-lg;
-  background: $color-bg-card;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-card;
-
-  &:active {
-    opacity: 0.85;
-  }
-}
-
-.cabinetInfo {
   display: flex;
   flex-direction: column;
-  min-width: 0;
 }
 
-.cabinetTitle {
-  font-size: $font-size-md;
-  font-weight: $font-weight-semibold;
-  color: $color-text-primary;
-}
-
-.cabinetSub {
-  font-size: $font-size-xs;
-  color: $color-text-tertiary;
-  margin-top: 4rpx;
-}
-
-.cabinetLink {
-  flex-shrink: 0;
-  font-size: $font-size-sm;
-  color: $color-primary;
-  white-space: nowrap;
-  margin-left: $spacing-md;
-}
-
-// ---------- 口味问卷入口 ----------
-.quizCard {
+.emptyNotice {
+  flex: 1;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  margin-top: $spacing-md;
-  padding: $spacing-md $spacing-lg;
-  border-radius: $radius-lg;
-  background: linear-gradient(120deg, #f7efd9 0%, #f3e6cf 100%);
-  box-shadow: $shadow-card;
-
-  &:active {
-    opacity: 0.88;
-  }
+  justify-content: center;
+  padding: $spacing-xl;
+  min-height: 60vh;
 }
 
-.quizInfo {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.quizTitle {
+.emptyNoticeTitle {
   font-size: $font-size-md;
-  font-weight: $font-weight-semibold;
-  color: $color-accent-dark;
-}
-
-.quizSub {
-  font-size: $font-size-xs;
   color: $color-text-tertiary;
-  margin-top: 4rpx;
-}
-
-.quizArrow {
-  flex-shrink: 0;
-  font-size: $font-size-md;
-  color: $color-accent-dark;
-  margin-left: $spacing-md;
-}
-
-// ---------- 生成按钮 ----------
-.generateBar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: $spacing-md $spacing-xl;
-  background: rgba(246, 242, 233, 0.94);
-  box-shadow: $shadow-float;
-  z-index: 20;
-}
-
-.generateBtn {
-  display: block;
-  height: $button-height-lg;
-  line-height: $button-height-lg;
-  text-align: center;
-  border-radius: $radius-button;
-  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
-  color: $color-text-white;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-semibold;
-  letter-spacing: 4rpx;
-
-  &:active {
-    opacity: 0.92;
-    transform: scale(0.99);
-  }
 }
 
 // ---------- 结果区 ----------
 .results {
-  margin-top: $spacing-xl;
+  margin-top: $spacing-md;
 }
 
 .resultHead {
@@ -197,13 +56,20 @@
   margin-bottom: $spacing-md;
 }
 
-.shufflePill {
+.actionRow {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
   flex-shrink: 0;
+  margin-top: 4rpx;
+}
+
+.actionPill {
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 56rpx;
   padding: 0 $spacing-md;
-  margin-top: 4rpx;
   border-radius: $radius-round;
   background: #e3ece6;
 
@@ -212,13 +78,13 @@
   }
 }
 
-.shuffleIcon {
+.actionIcon {
   font-size: 28rpx;
   color: $color-primary;
   margin-right: 6rpx;
 }
 
-.shuffleText {
+.actionText {
   font-size: $font-size-sm;
   color: $color-primary;
   white-space: nowrap;

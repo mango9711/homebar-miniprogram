@@ -58,19 +58,6 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
-.heroGo {
-  font-size: $font-size-sm;
-  color: $color-text-white;
-  background: rgba(255, 255, 255, 0.16);
-  padding: $spacing-xs $spacing-md;
-  border-radius: $radius-round;
-  white-space: nowrap;
-
-  &:active {
-    opacity: 0.85;
-  }
-}
-
 // ---------- 搜索与快捷操作 ----------
 .toolbar {
   margin-top: $spacing-lg;
@@ -281,5 +268,36 @@
   text-align: center;
   font-size: $font-size-xs;
   color: $color-text-tertiary;
-  margin-top: $spacing-lg;
+  margin-top: $spacing-xl;
+  margin-bottom: 180rpx;
+}
+
+// ---------- 生成按钮 ----------
+.generateBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-md $spacing-xl;
+  background: rgba(246, 242, 233, 0.94);
+  box-shadow: $shadow-float;
+  z-index: 20;
+}
+
+.generateBtn {
+  display: block;
+  height: $button-height-lg;
+  line-height: $button-height-lg;
+  text-align: center;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 4rpx;
+
+  &:active {
+    opacity: 0.92;
+    transform: scale(0.99);
+  }
 }
