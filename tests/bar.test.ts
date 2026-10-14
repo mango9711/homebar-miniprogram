@@ -74,6 +74,7 @@ test('planGenerate：全部做过（无探索款）时优雅退化', () => {
     madeKeys: RECIPES.map((r) => r.id),
     likedKeys: ['mojito'],
     dislikedKeys: [],
+    averageKeys: [],
     samples: RECIPES.length
   }
   const res = planGenerate(fullInv(), {}, names, allMade)
@@ -117,6 +118,18 @@ test('回归：好评老歌进入前列（固化用例③调参结论）', () =>
     rankOf('mojito') > 0 && rankOf('mojito') <= 3,
     `莫吉托应在前 3，实际 #${rankOf('mojito')}`
   )
+})
+
+test('回归：量纲统一后金汤力与法国75 拉开差距（不易翻转）', () => {
+  const records = recs([
+    ['mojito', 'recommend', 1],
+    ['gin_tonic', 'recommend', 2],
+    ['tom_collins', 'recommend', 3]
+  ])
+  const profile = buildTasteProfile(records, {}, {})
+  const g = scoreTaste(byId('gin_tonic'), profile).score
+  const f = scoreTaste(byId('french75'), profile).score
+  assert.ok(g - f > 0.05, `金汤力应明显高于法国75，实际差 ${(g - f).toFixed(3)}`)
 })
 
 test('recipeKey：经典用 id，创意用材料签名', () => {

@@ -55,6 +55,8 @@ export interface TasteProfile {
   likedKeys: string[]
   /** 明确打了差评（bad）的配方 key，用于直接压制、避免重复推荐 */
   dislikedKeys: string[]
+  /** 打了「一般」（average）的配方 key，用于区分"一般"与"未评分" */
+  averageKeys: string[]
   /** 有效行为样本数，0 表示冷启动 */
   samples: number
 }

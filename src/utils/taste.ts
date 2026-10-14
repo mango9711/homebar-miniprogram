@@ -32,10 +32,10 @@ const K_BASE = 0.4
 const PENALTY_MADE = -0.3
 /** 没喝过的配方加成（目标：发现新品；已下调以让好评老歌更靠前） */
 const BONUS_NOVEL = 0.4
-/** 明确好评过的配方额外加权（让"心头好"稳定靠前） */
-const LIKED_BONUS = 1.7
+/** 明确好评过的配方额外加权（量纲统一后不再需要极端值） */
+const LIKED_BONUS = 1.1
 /** 明确差评过的配方直接压制（即使标签契合也不重复推荐） */
-const DISLIKED_PENALTY = -1.5
+const DISLIKED_PENALTY = -1.0
 
 /** 参与基酒偏好统计的材料（与创意生成器的基酒集合保持一致，额外含起泡酒） */
 const BASE_SPIRITS = [
@@ -148,11 +148,12 @@ export function buildTasteProfile(
   const madeKeys = Object.keys(records)
   const likedKeys = madeKeys.filter((k) => records[k].rating === 'recommend')
   const dislikedKeys = madeKeys.filter((k) => records[k].rating === 'bad')
+  const averageKeys = madeKeys.filter((k) => records[k].rating === 'average')
 
   logger.info(
     'taste:profile',
-    `画像构建完成：样本 ${n} 条行为，好评 ${likedKeys.length} 款，差评 ${dislikedKeys.length} 款`,
-    { tags, strengths, bases, madeKeys, likedKeys, dislikedKeys }
+    `画像构建完成：样本 ${n} 条行为，好评 ${likedKeys.length} 款，一般 ${averageKeys.length} 款，差评 ${dislikedKeys.length} 款`,
+    { tags, strengths, bases, madeKeys, likedKeys, dislikedKeys, averageKeys }
   )
 
   return {
@@ -162,6 +163,7 @@ export function buildTasteProfile(
     madeKeys,
     likedKeys,
     dislikedKeys,
+    averageKeys,
     samples: n
   }
 }
@@ -205,14 +207,16 @@ export function mainBase(recipe: Recipe): string | null {
 
 /** 结合画像给单款配方打分，并给出可解释理由 */
 export function scoreTaste(recipe: Recipe, profile: TasteProfile): TasteScore {
-  // —— 标签契合 ——
-  let tagFit = 0
+  // —— 标签契合：取「命中标签的平均权重」，归一化到 [-1, 1] ——
+  // 用平均而非累加，避免"标签多的酒天然占优"，也让各分项量纲一致
+  let tagSum = 0
   const hits: string[] = []
   recipe.tags.forEach((t) => {
     const w = profile.tags[t] || 0
-    tagFit += w
+    tagSum += w
     if (w > 0) hits.push(t)
   })
+  const tagFit = recipe.tags.length ? tagSum / recipe.tags.length : 0
 
   // —— 度数契合 ——
   const strFit = profile.strengths[recipe.strength] || 0
@@ -233,6 +237,7 @@ export function scoreTaste(recipe: Recipe, profile: TasteProfile): TasteScore {
   const made = profile.madeKeys.indexOf(key) !== -1
   const liked = profile.likedKeys.indexOf(key) !== -1
   const disliked = profile.dislikedKeys.indexOf(key) !== -1
+  const average = profile.averageKeys.indexOf(key) !== -1
   const novelty = made ? PENALTY_MADE : BONUS_NOVEL
   const likedBonus = liked ? LIKED_BONUS : 0
   const dislikedPenalty = disliked ? DISLIKED_PENALTY : 0
@@ -265,6 +270,7 @@ export function scoreTaste(recipe: Recipe, profile: TasteProfile): TasteScore {
   if (made) {
     if (disliked) reasons.push('你上次不太喜欢')
     else if (liked) reasons.push('你上次给了好评')
+    else if (average) reasons.push('你上次觉得一般')
     else reasons.push('你做过，重温一下')
   } else {
     if (hits[0]) reasons.push(`因为 ${hits[0]}`)

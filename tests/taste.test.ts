@@ -18,6 +18,7 @@ function profileOf(partial: Partial<TasteProfile>): TasteProfile {
     madeKeys: [],
     likedKeys: [],
     dislikedKeys: [],
+    averageKeys: [],
     samples: 0,
     ...partial
   }
@@ -134,6 +135,25 @@ test('scoreTaste：明确差评的配方被直接压制', () => {
   assert.ok(bad.parts.disliked < 0)
   assert.ok(bad.score < madeOnly.score)
   assert.deepEqual(bad.reasons, ['你上次不太喜欢'])
+})
+
+test('scoreTaste：标签契合归一化为「平均契合」（∈[-1,1]）', () => {
+  const mojito = byId('mojito') // tags: 清爽 / 薄荷 / 酸甜（3 个）
+  const all = scoreTaste(mojito, profileOf({ tags: { 清爽: 1, 薄荷: 1, 酸甜: 1 } }))
+  assert.ok(Math.abs(all.parts.tagFit - 1) < 1e-9)
+  // 只命中一个 → 平均而非累加
+  const one = scoreTaste(mojito, profileOf({ tags: { 清爽: 1 } }))
+  assert.ok(Math.abs(one.parts.tagFit - 1 / 3) < 1e-9)
+  // 不随标签数膨胀
+  assert.ok(Math.abs(all.parts.tagFit) <= 1 + 1e-9)
+})
+
+test('scoreTaste：区分「一般」与「未评分」的文案', () => {
+  const mojito = byId('mojito')
+  const avg = scoreTaste(mojito, profileOf({ madeKeys: ['mojito'], averageKeys: ['mojito'] }))
+  assert.deepEqual(avg.reasons, ['你上次觉得一般'])
+  const unrated = scoreTaste(mojito, profileOf({ madeKeys: ['mojito'] }))
+  assert.deepEqual(unrated.reasons, ['你做过，重温一下'])
 })
 
 test('scoreTaste：分数 = 各分项之和', () => {
