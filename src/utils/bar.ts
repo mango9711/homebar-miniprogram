@@ -2,12 +2,16 @@ import type {
   GenerateResult,
   Ingredient,
   Recipe,
-  Scored
+  Scored,
+  TasteProfile
 } from '@/types'
 import { RECIPES } from '@/data/recipes'
 import { isCustomId } from '@/data/categories'
 import { QUIZ_QUESTIONS } from '@/data/quiz'
 import type { QuizOption } from '@/data/quiz'
+import { scoreTaste, mainBase } from '@/utils/taste'
+import type { ScoreParts } from '@/utils/taste'
+import { logger } from '@/utils/logger'
 
 type Inv = Record<string, boolean>
 type Custom = Record<string, Array<[string, string]>>
@@ -178,7 +182,8 @@ function creativeName(style: string, baseId: string | null, usedIds: string[], N
     }
   }
   if (!flavor) {
-    const cu = usedIds.find(isCustomId)
+    // 用自定义材料兜底命名时，排除基酒本身，避免出现「梅斯卡尔梅斯卡尔冰醇」这类重名
+    const cu = usedIds.find((id) => isCustomId(id) && id !== baseId)
     if (cu) flavor = (NAME[cu] || '').slice(0, 4)
   }
   if (style === 'mocktail') return `${flavor || '果园'}无酒精宾治`
@@ -504,19 +509,198 @@ export function buildCreativeRecipes(inv: Inv, custom: Custom, NAME: NameMap): R
 // 生成分流
 // ---------------------------------------------------------------------------
 
-export function planGenerate(inv: Inv, custom: Custom, NAME: NameMap): GenerateResult {
+type Ranked = Scored & {
+  taste: number
+  made: boolean
+  liked: boolean
+  tagFit: number
+  parts: ScoreParts
+}
+
+/** 画像是否已具备可用信号（有行为样本或问卷先验） */
+function hasTasteSignal(profile?: TasteProfile): profile is TasteProfile {
+  if (!profile) return false
+  return profile.samples > 0 || Object.keys(profile.tags).length > 0
+}
+
+const EMPTY_PARTS: ScoreParts = {
+  tagFit: 0,
+  strFit: 0,
+  baseFit: 0,
+  novelty: 0,
+  liked: 0,
+  disliked: 0
+}
+
+/** 叠加口味画像分与可解释理由；无信号时退回原始 pop，行为与旧版一致 */
+function personalize(cards: Scored[], profile?: TasteProfile): Ranked[] {
+  const active = hasTasteSignal(profile)
+  return cards.map((c) => {
+    if (!active) {
+      return {
+        ...c,
+        taste: c.recipe.pop || 0,
+        made: false,
+        liked: false,
+        tagFit: 0,
+        parts: EMPTY_PARTS
+      }
+    }
+    const t = scoreTaste(c.recipe, profile)
+    return {
+      ...c,
+      taste: t.score,
+      made: t.made,
+      liked: t.liked,
+      tagFit: t.tagFit,
+      parts: t.parts,
+      reasons: t.reasons
+    }
+  })
+}
+
+/** 日志用的一句话摘要 */
+function brief(c: Ranked) {
+  return {
+    name: c.recipe.name,
+    taste: Math.round(c.taste * 100) / 100,
+    base: mainBase(c.recipe),
+    made: c.made,
+    liked: c.liked,
+    tagFit: Math.round(c.tagFit * 100) / 100,
+    parts: {
+      tagFit: Math.round(c.parts.tagFit * 100) / 100,
+      strFit: Math.round(c.parts.strFit * 100) / 100,
+      baseFit: Math.round(c.parts.baseFit * 100) / 100,
+      novelty: c.parts.novelty,
+      liked: c.parts.liked,
+      disliked: c.parts.disliked
+    }
+  }
+}
+
+const TOP_SIZE = 3
+
+/**
+ * 在候选里挑一个满足 pred 的卡片：优先主基酒未出现过的，其次分数最高（cards 已降序）。
+ * 找不到则返回 undefined。
+ */
+function pickPreferred(
+  cards: Ranked[],
+  used: Set<Ranked>,
+  usedBases: Set<string>,
+  pred: (c: Ranked) => boolean,
+  slot: string
+): Ranked | undefined {
+  const cands = cards.filter((c) => !used.has(c) && pred(c))
+  if (!cands.length) return undefined
+  const diff = cands.find((c) => {
+    const b = mainBase(c.recipe)
+    return !b || !usedBases.has(b)
+  })
+  if (diff && diff !== cands[0]) {
+    logger.info(
+      'rec:diversity',
+      `${slot} 错开基酒：跳过 ${cands[0].recipe.name}(${mainBase(cands[0].recipe) || '无'})，` +
+        `改选 ${diff.recipe.name}(${mainBase(diff.recipe) || '无'})`
+    )
+  }
+  return diff || cands[0]
+}
+
+/**
+ * 前 N 席重排：既看得到心头好，又有新东西，还尽量不重样。
+ * 1) 第 1 位：全体最高分；
+ * 2) 回归位：做过且明确好评的最高分款（没有则退化为"做过且合口味"）；
+ * 3) 探索位：没喝过但合口味的最高分款；
+ * 4) 同一基酒优先错开，避免前三全是同一款底酒；候选不足时自然退化。
+ */
+function arrangeExplore(cards: Ranked[], size = TOP_SIZE): Ranked[] {
+  if (cards.length <= 1) return cards
+  const hasMade = cards.some((c) => c.made && c.tagFit > 0)
+  const hasDiscovery = cards.some((c) => !c.made && c.tagFit > 0)
+  if (!hasMade && !hasDiscovery) {
+    logger.info('rec:arrange', '无画像信号，跳过重排，保持按分数排序')
+    return cards
+  }
+
+  const head: Ranked[] = []
+  const used = new Set<Ranked>()
+  const usedBases = new Set<string>()
+  const push = (c?: Ranked, slot?: string) => {
+    if (c && !used.has(c)) {
+      used.add(c)
+      head.push(c)
+      const b = mainBase(c.recipe)
+      if (b) usedBases.add(b)
+      if (slot) logger.info('rec:arrange', `${slot} → ${c.recipe.name}`, brief(c))
+    }
+  }
+
+  push(cards[0], '第 1 位(最高分)')
+  // 回归位：优先"做过且好评"，否则"做过且合口味"
+  push(
+    pickPreferred(cards, used, usedBases, (c) => c.made && c.liked, '回归位') ||
+      pickPreferred(cards, used, usedBases, (c) => c.made && c.tagFit > 0, '回归位'),
+    '回归位'
+  )
+  // 探索位：没喝过但合口味
+  push(
+    pickPreferred(cards, used, usedBases, (c) => !c.made && c.tagFit > 0, '探索位'),
+    '探索位'
+  )
+  // 补足
+  while (head.length < size) {
+    const next = pickPreferred(cards, used, usedBases, () => true, `第 ${head.length + 1} 位`)
+    if (!next) break
+    push(next, `第 ${head.length + 1} 位(补足)`)
+  }
+
+  return [...head, ...cards.filter((c) => !used.has(c))]
+}
+
+export function planGenerate(
+  inv: Inv,
+  custom: Custom,
+  NAME: NameMap,
+  profile?: TasteProfile
+): GenerateResult {
   const scored = scoreRecipes(inv)
-  const perfect = scored
-    .filter((s) => s.score === 0)
-    .sort((a, b) => (b.recipe.pop || 0) - (a.recipe.pop || 0))
-  const near = scored
-    .filter((s) => s.score > 0)
-    .sort((a, b) => a.score - b.score || (b.recipe.pop || 0) - (a.recipe.pop || 0))
+  const perfect = personalize(
+    scored.filter((s) => s.score === 0),
+    profile
+  ).sort(
+    (a, b) => b.taste - a.taste || (b.recipe.pop || 0) - (a.recipe.pop || 0)
+  )
+  // 待补齐清单：先按缺料少，再按口味契合（让"补齐就能解锁"的更合口味）
+  const near = personalize(
+    scored.filter((s) => s.score > 0),
+    profile
+  ).sort(
+    (a, b) =>
+      a.score - b.score ||
+      b.taste - a.taste ||
+      (b.recipe.pop || 0) - (a.recipe.pop || 0)
+  )
 
   const creative = buildCreativeRecipes(inv, custom, NAME)
-  const creativeCards = creative.map((recipe) => ({ recipe, missing: [], score: 0 }))
+  const creativeCards = personalize(
+    creative.map((recipe) => ({ recipe, missing: [], score: 0 })),
+    profile
+  )
 
-  const allPerfect = [...perfect, ...creativeCards]
+  const sorted = [...perfect, ...creativeCards].sort(
+    (a, b) =>
+      b.taste - a.taste ||
+      Number(!!a.recipe.creative) - Number(!!b.recipe.creative) ||
+      (b.recipe.pop || 0) - (a.recipe.pop || 0)
+  )
+  const allPerfect = arrangeExplore(sorted)
+
+  logger.info('rec:plan', `可调 ${allPerfect.length} 款，最终前 5 名（含分数拆解）`, {
+    signal: hasTasteSignal(profile),
+    top: allPerfect.slice(0, 5).map(brief)
+  })
 
   if (allPerfect.length > 0) {
     const hasClassic = perfect.length > 0

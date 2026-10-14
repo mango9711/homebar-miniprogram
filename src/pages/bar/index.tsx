@@ -5,7 +5,8 @@ import Taro from '@tarojs/taro'
 import useBarStore from '@/store/useBarStore'
 import RecipeCard from '@/components/RecipeCard'
 import { makeName } from '@/data/categories'
-import { planGenerate, recipeKey, scoreRecipes } from '@/utils/bar'
+import { planGenerate, recipeKey } from '@/utils/bar'
+import { buildTasteProfile } from '@/utils/taste'
 import type { GenerateResult, Scored } from '@/types'
 import styles from './index.module.scss'
 
@@ -30,24 +31,30 @@ const h5BarStyle = IS_H5
 
 
 function BarPage() {
-  const { inv, custom, setCreativeRecipes } = useBarStore()
+  const { inv, custom, records, quizAnswers, views, setCreativeRecipes, bumpView } =
+    useBarStore()
 
   const [result, setResult] = useState<GenerateResult | null>(null)
   const [shown, setShown] = useState<Scored[]>([])
 
   const names = useMemo(() => makeName(custom), [custom])
   const selectedCount = useMemo(() => Object.keys(inv).length, [inv])
-  // 可调的经典配方数量随酒柜库存实时变化
-  const makeableCount = useMemo(
-    () => scoreRecipes(inv).filter((s) => s.score === 0).length,
-    [inv]
+  // 口味画像：由记录、问卷与浏览派生，任一变化都会自动重算
+  const profile = useMemo(
+    () => buildTasteProfile(records, quizAnswers, views),
+    [records, quizAnswers, views]
+  )
+  // 记录变化（新增/编辑评分）时的轻量签名，避免直接比较含照片的大对象
+  const recordsSig = useMemo(
+    () => Object.values(records).reduce((sum, r) => sum + r.updatedAt, 0),
+    [records]
   )
 
   const prevInvRef = useRef<string>('')
 
   useDidShow(() => {
     Taro.removeStorageSync('should_generate_cocktails')
-    const currentState = JSON.stringify({ inv, custom })
+    const currentState = JSON.stringify({ inv, custom, recordsSig, quizAnswers })
     if (currentState !== prevInvRef.current || !result) {
       generate()
       prevInvRef.current = currentState
@@ -64,6 +71,7 @@ function BarPage() {
 
   const openRecipe = (data: Scored) => {
     const { recipe } = data
+    bumpView(recipeKey(recipe))
     if (recipe.creative) {
       Taro.navigateTo({
         url: `/subpages/recipe/index?id=${recipeKey(recipe)}&creative=1`
@@ -79,7 +87,7 @@ function BarPage() {
       setShown([])
       return
     }
-    const r = planGenerate(inv, custom, names)
+    const r = planGenerate(inv, custom, names, profile)
     const creativeOnly = r.cards.map((s) => s.recipe).filter((r) => r.creative)
     if (creativeOnly.length > 0) {
       setCreativeRecipes(creativeOnly)

@@ -68,6 +68,16 @@ function RecipeCard({ data, index, names, onOpen }: RecipeCardProps) {
         ))}
       </View>
 
+      {data.reasons && data.reasons.length > 0 && (
+        <View className={styles.reasonRow}>
+          {data.reasons.map((reason) => (
+            <Text key={reason} className={styles.reason}>
+              ✧ {reason}
+            </Text>
+          ))}
+        </View>
+      )}
+
       <Text className={styles.desc}>{recipe.desc}</Text>
 
       <View className={styles.ingRow}>

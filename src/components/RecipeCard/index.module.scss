@@ -104,6 +104,22 @@
   white-space: nowrap;
 }
 
+.reasonRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $spacing-sm;
+}
+
+.reason {
+  font-size: $font-size-xs;
+  padding: 4rpx $spacing-sm;
+  border-radius: $radius-round;
+  margin: 0 $spacing-xs $spacing-xs 0;
+  white-space: nowrap;
+  background: $color-bg-hover;
+  color: $color-primary;
+}
+
 .desc {
   display: block;
   font-size: $font-size-md;

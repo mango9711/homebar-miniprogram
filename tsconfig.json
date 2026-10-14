@@ -13,7 +13,7 @@
     "noUnusedParameters": true,
     "strictNullChecks": true,
     "sourceMap": true,
-    "baseUrl": "",
+    "baseUrl": ".",
     "rootDir": "",
     "jsx": "react-jsx",
     "allowJs": true,
@@ -23,6 +23,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "types"],
+  "include": ["src", "types", "scripts", "tests"],
   "compileOnSave": false
 }

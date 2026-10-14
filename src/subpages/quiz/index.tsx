@@ -15,7 +15,7 @@ const MAX_CARDS = 6
 const MAX_HINTS = 3
 
 function QuizPage() {
-  const { inv, custom } = useBarStore()
+  const { inv, custom, saveQuiz } = useBarStore()
   const names = useMemo(() => makeName(custom), [custom])
 
   const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -45,6 +45,8 @@ function QuizPage() {
       return
     }
     setFinished(true)
+    // 答卷持久化，作为口味画像的冷启动先验
+    saveQuiz(next)
     Taro.pageScrollTo({ scrollTop: 0, duration: 200 }).catch((e) => {
       console.error('[Quiz] scroll failed:', e)
     })

@@ -16,6 +16,8 @@ const CUSTOM_KEY = 'homebar-custom-v1'
 const CREATIVE_KEY = 'homebar-creative-v1'
 const RECORDS_KEY = 'homebar-records-v1'
 const PROFILE_KEY = 'homebar-profile-v1'
+const QUIZ_KEY = 'homebar-quiz-v1'
+const VIEWS_KEY = 'homebar-views-v1'
 
 function readJSON<T>(key: string, fallback: T): T {
   try {
@@ -53,6 +55,10 @@ interface BarState {
   creativeRecipes: Recipe[]
   records: Record<string, MadeRecord>
   profile: UserProfile
+  /** 口味问卷答卷，作为口味画像的冷启动先验 */
+  quizAnswers: Record<string, string>
+  /** 配方详情浏览计数：key → 次数，作为隐式正反馈 */
+  views: Record<string, number>
 
   toggle: (id: string) => void
   setMany: (ids: string[], on: boolean) => void
@@ -67,6 +73,8 @@ interface BarState {
   ) => void
   deleteRecord: (key: string) => void
   setProfile: (patch: Partial<UserProfile>) => void
+  saveQuiz: (answers: Record<string, string>) => void
+  bumpView: (key: string) => void
 }
 
 const useBarStore = create<BarState>((set, get) => ({
@@ -75,6 +83,8 @@ const useBarStore = create<BarState>((set, get) => ({
   creativeRecipes: readJSON<Recipe[]>(CREATIVE_KEY, []),
   records: readJSON<Record<string, MadeRecord>>(RECORDS_KEY, {}),
   profile: readJSON<UserProfile>(PROFILE_KEY, defaultProfile),
+  quizAnswers: readJSON<Record<string, string>>(QUIZ_KEY, {}),
+  views: readJSON<Record<string, number>>(VIEWS_KEY, {}),
 
   toggle: (id) => {
     const { inv } = get()
@@ -149,6 +159,18 @@ const useBarStore = create<BarState>((set, get) => ({
     const profile = { ...get().profile, ...patch }
     writeJSON(PROFILE_KEY, profile)
     set({ profile })
+  },
+
+  saveQuiz: (answers) => {
+    writeJSON(QUIZ_KEY, answers)
+    set({ quizAnswers: answers })
+  },
+
+  bumpView: (key) => {
+    if (!key) return
+    const views = { ...get().views, [key]: (get().views[key] || 0) + 1 }
+    writeJSON(VIEWS_KEY, views)
+    set({ views })
   }
 }))
 

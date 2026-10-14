@@ -1,5 +1,7 @@
 # HomeBar 家庭调酒台
 
+> 版本与重要改动记录见 [CHANGELOG.md](CHANGELOG.md)。
+
 一个帮你「用家里现有的酒和饮料，调出今晚能喝的一杯」的微信小程序。
 
 整个 App 的主线很简单：**先去「Cabinet（酒柜）」勾选家里有什么**（伏特加？金酒？柠檬？可乐？），**再到「Bar（调酒）」决定今晚喝什么**。决定的方式有两种，随手挑一种：
@@ -15,6 +17,8 @@
 - 告诉你还差哪几样材料就能解锁某款经典配方；
 - 把每次调过的酒、评分、心得和照片记录下来，还能看调酒日历。
 
+而且它会**越用越懂你**：你每次给酒打分（好评 / 一般 / 差评）、点开看过的配方，都会被记下来，慢慢形成一份「口味画像」，之后推荐的酒会越来越对味 —— 既把你的心头好排到前面，也会留一两个位置让你尝新。
+
 你勾选的酒柜库存会**自动保存在本机**，下次打开不用重新设置。
 
 > 这份文档是写给**零基础开发者**的。跟着一步步做，你就能把这个项目在电脑上跑起来。
@@ -28,9 +32,11 @@
 3. [把项目跑起来](#3-把项目跑起来)
 4. [项目结构地图](#4-项目结构地图)
 5. [它是怎么工作的](#5-它是怎么工作的)
-6. [常见修改：加一款配方](#6-常见修改加一款配方)
-7. [数据存在哪里](#7-数据存在哪里)
-8. [常见问题排查](#8-常见问题排查)
+6. [推荐系统：越用越懂你](#6-推荐系统越用越懂你)
+7. [常见修改：加一款配方](#7-常见修改加一款配方)
+8. [数据存在哪里](#8-数据存在哪里)
+9. [常见问题排查](#9-常见问题排查)
+10. [开发工具与测试](#10-开发工具与测试)
 
 ---
 
@@ -113,8 +119,10 @@ v20.11.1
 在终端里进入项目所在目录（`cd` 就是 change directory「切换目录」）：
 
 ```bash
-cd /Users/yaohui/yaohui-workspace/homebar-miniprogram
+cd /path/to/homebar-miniprogram
 ```
+
+> 把 `/path/to/homebar-miniprogram` 换成**你自己电脑上项目所在的真实路径**（就是你放这份代码的文件夹）。不知道怎么填：在访达里把项目文件夹拖进终端，会自动补全路径。
 
 **验证是否成功**：执行下面的命令，能列出 `package.json`、`src` 等文件就对了。
 
@@ -188,10 +196,9 @@ http://localhost:10086
 
 1. 点底部 `Wine Cabinet` 页签，进入「我的酒柜」；
 2. 点「一键填入常见酒柜」按钮（或者手动勾选你家里有的材料）；
-3. 切回 `Bar` 页签，顶部数字「N 款经典配方现在就能调」应该随之变化；
-4. 点底部「生成调酒清单」按钮；
-5. 应该会滚到下方，出现若干张配方卡片。
-6. 再玩一下口味推荐：点 Bar 页的「不知道喝什么？」卡片，依次回答 4 道选择题，会得到一份按你口味排序的酒单（顶部还会显示你选出的这条「口味路径」）。
+3. 点页面底部的「生成调酒清单」按钮 —— 它会自动跳到 `Bar` 页，并按你勾选的材料列出能调的酒；
+4. 在 `Bar` 页应该能看到若干张配方卡片，点任意一张可进详情看用量和步骤；
+5. 再玩一下口味推荐：在 `Bar` 页点「帮我选」，依次回答 4 道选择题，会得到一份按你口味排序的酒单（顶部还会显示你选出的这条「口味路径」）。旁边的「换一换」可以随机换几张看看。
 
 **A-5. 改代码会怎样**
 
@@ -233,7 +240,7 @@ ls dist
 
 1. 打开**微信开发者工具**，用微信扫码登录；
 2. 左侧选择「小程序」→ 点击「**+**」或「导入项目」；
-3. **项目目录**：填项目根目录 `/Users/yaohui/yaohui-workspace/homebar-miniprogram`
+3. **项目目录**：填项目根目录 `/path/to/homebar-miniprogram`
    （**不是** `dist` 文件夹！工具会自动读根目录的 `project.config.json`，里面已指定代码在 `dist/` 下）；
 4. **AppID**：填 `wx4b88b5cc00ead95a`；没有的话选「测试号」也能跑；
 5. 点击「导入」。
@@ -263,7 +270,7 @@ ls dist
 
 ```bash
 # 1. 进入项目目录
-cd /Users/yaohui/yaohui-workspace/homebar-miniprogram
+cd /path/to/homebar-miniprogram
 
 # 2. 安装依赖（只需第一次）
 npm install
@@ -281,7 +288,7 @@ npm run dev:h5
 
 ```bash
 # 1. 进入项目目录
-cd /Users/yaohui/yaohui-workspace/homebar-miniprogram
+cd /path/to/homebar-miniprogram
 
 # 2. 安装依赖（只需第一次）
 npm install
@@ -304,6 +311,8 @@ npm run dev:weapp
 | `npm run dev:weapp` | 启动小程序开发模式（编译到 `dist/` 并监听） | 开发微信小程序 |
 | `npm run build:h5` | 打包网页版（压缩优化） | 部署上线前 |
 | `npm run build:weapp` | 打包微信小程序（压缩优化） | 上传发布前 |
+| `npm run rec:demo` | 用多组 mock 数据离线跑推荐排序（详见[第 10 节](#10-开发工具与测试)） | 调整推荐权重、排查排序异常 |
+| `npm run test:unit` | 跑单元测试（共 42 个用例） | 改动推荐/排序逻辑后自测 |
 
 > `dev:*` 是**开发模式**（不压缩、改代码自动重编译，会一直运行直到你 `Ctrl + C`）；`build:*` 是**打包模式**（压缩优化、跑完就退出），别搞混。
 
@@ -327,10 +336,12 @@ homebar-miniprogram/
 │   ├── app.config.ts       # ⭐ 全局配置：有哪些页面、底部 Tab、导航栏颜色
 │   ├── app.scss            # 全局样式
 │   │
-│   ├── pages/              # ⭐ 页面（一个文件夹 = 一个页面）
+│   ├── pages/              # ⭐ 主包页面（带底部 Tab 的三个）
 │   │   ├── bar/            #   调酒：生成酒单（Tab 第 1 个，也是默认首页）
 │   │   ├── cabinet/        #   酒柜：维护原料库存（Tab 第 2 个）
-│   │   ├── me/             #   我的：个人信息 + 调酒记录（Tab 第 3 个）
+│   │   └── me/             #   我的：个人信息 + 调酒记录（Tab 第 3 个）
+│   │
+│   ├── subpages/           # 二级页面（从主页面点进去，没有底部 Tab）
 │   │   ├── quiz/           #   口味问答：做选择题、推荐最合口味的酒
 │   │   ├── recipe/         #   配方详情：用量、步骤、记录心得
 │   │   └── calendar/       #   调酒日历
@@ -348,20 +359,33 @@ homebar-miniprogram/
 │   │   └── useBarStore.ts  # ⭐ 酒柜勾选、自定义原料、记录、资料都存这儿
 │   │
 │   ├── utils/              # 工具函数（纯逻辑，不含界面）
-│   │   ├── bar.ts          # ⭐ 核心算法：匹配打分、创意调酒生成器、口味问答匹配
+│   │   ├── bar.ts          # ⭐ 生成与调度：库存匹配、创意调酒生成器、前几席排序
+│   │   ├── taste.ts        # ⭐ 推荐核心：口味画像 + 个性化打分
+│   │   ├── logger.ts       #   分级日志（排查排序异常用）
 │   │   └── image.ts        #   选择并压缩照片
 │   │
 │   ├── services/
-│   │   └── cloud.ts        # 云函数调用封装（当前项目本地即可运行，见第 7 节）
+│   │   └── cloud.ts        # 云函数调用封装（当前项目本地即可运行，见第 8 节）
 │   │
 │   ├── styles/             # 主题色、公共样式变量
 │   │   ├── theme.scss      # ⭐ 全站配色定义（墨绿 / 香槟金 / 暖米纸）
-│   │   └── variables.scss  #   尺寸、字体等变量
+│   │   ├── variables.scss  #   尺寸、字体等变量
+│   │   └── compat.scss     #   跨端（H5 / 小程序）兼容样式
 │   │
 │   ├── types/
 │   │   └── index.ts        # ⭐ 所有数据结构的「类型定义」（配方长什么样…）
 │   │
 │   └── assets/             # 图片资源（底部 Tab 图标等）
+│
+├── scripts/                # 开发脚本
+│   └── rec-demo.ts         # ⭐ 推荐系统离线调试工具（npm run rec:demo）
+│
+├── tests/                  # ⭐ 单元测试（npm run test:unit）
+│   ├── fixtures.ts         #   测试公用数据（酒柜、配方、记录构造）
+│   ├── taste.test.ts       #   口味画像与打分
+│   ├── bar.test.ts         #   排序与调度
+│   ├── logger.test.ts      #   日志级别
+│   └── personas.test.ts    #   各类用户群体 + 全局不变量
 │
 ├── types/global.d.ts       # 全局类型声明
 ├── package.json            # 项目说明 + 依赖清单 + 可用命令
@@ -400,16 +424,17 @@ import useBarStore from '@/store/useBarStore'
 底部 Tab
 ├── Wine Cabinet（酒柜）── 勾选、维护家里的原料库存
 │            │
-│            └─ 库存自动存到本机 ──▶ Bar 页读取后决定「能调哪些酒」
+│            ├─ 库存自动存到本机 ──▶ Bar 页读取后决定「能调哪些酒」
+│            └─ 点「生成调酒清单」── 跳到 Bar 页开始生成
 │
 ├── Bar（调酒）── 决定今晚喝什么，有两条路：
-│                 ├─ 点「生成调酒清单」── 按库存列出你现在能调的酒
-│                 └─ 点「不知道喝什么？」──▶ 口味问答（Quiz）
-│                                           依次做 4 道选择题
-│                                                   ↓
-│                                           按口味排序的推荐酒单
-│                                                   ↓
-│                                   Recipe（配方详情）── 记录评分/心得/照片
+│                 ├─ 打开即按库存生成酒单（也能点「换一换」随机换几张）
+│                 └─ 点「帮我选」──▶ 口味问答（Quiz）
+│                                    依次做 4 道选择题
+│                                            ↓
+│                                    按口味排序的推荐酒单
+│                                            ↓
+│                            Recipe（配方详情）── 记录评分/心得/照片
 │
 └── Me（我）── 查看所有调酒记录
               └── 调酒日历（Calendar）
@@ -417,7 +442,7 @@ import useBarStore from '@/store/useBarStore'
 
 ### 一次「生成」发生了什么
 
-核心逻辑都在 [src/utils/bar.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/utils/bar.ts) 的 `planGenerate` 函数里，流程如下：
+核心逻辑都在 [src/utils/bar.ts](src/utils/bar.ts) 的 `planGenerate` 函数里，流程如下：
 
 ```text
 1. 读取「酒柜」里勾选的材料（inv）
@@ -438,12 +463,13 @@ import useBarStore from '@/store/useBarStore'
              还是凑不出来？就展示「最接近的几款 + 还差什么」
 ```
 
-- **经典配方**写在 [src/data/recipes.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/data/recipes.ts)。
+- **经典配方**写在 [src/data/recipes.ts](src/data/recipes.ts)。
 - **创意特调**由 `buildCreativeRecipes` 按「嗨棒 / 酸饮 / 果味微风 / 奶香甜梦 / 纯饮」等固定结构，组合你酒柜里已有的材料实时拼出来，连名字和步骤都是自动生成的。
+- 算完「能调什么」之后，还会**叠加口味画像做个性化排序**（见[第 6 节](#6-推荐系统越用越懂你)）：你做过的、好评过的、差评过的酒，排位会被相应上浮或下压，前几名还会保证「有心头好、也有新鲜款」。
 
 ### 另一种玩法：回答几道题，让它按口味挑
 
-点 Bar 页的「不知道喝什么？」，会进入口味问答页（[src/pages/quiz/index.tsx](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/pages/quiz/index.tsx)）。它依次问你 4 道单选题：
+点 Bar 页的「帮我选」，会进入口味问答页（[src/subpages/quiz/index.tsx](src/subpages/quiz/index.tsx)）。它依次问你 4 道单选题：
 
 | 题 | 问的是 | 选项（每题都有一个「都行」） |
 | --- | --- | --- |
@@ -452,16 +478,18 @@ import useBarStore from '@/store/useBarStore'
 | 气泡 | 杯里要不要冒泡 | 要气泡 / 不要气泡 |
 | 风味 | 想要什么主香 | 果味奔放 / 草本花香 / 咖啡奶香 / 经典简约 |
 
-答完这 4 题，就得到一条「口味路径」（比如：酸爽开胃 · 微醺正好 · 要气泡 · 果味奔放）。程序拿这条路径去和配方库做匹配（[src/utils/bar.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/utils/bar.ts) 里的 `matchByQuiz`）：
+答完这 4 题，就得到一条「口味路径」（比如：酸爽开胃 · 微醺正好 · 要气泡 · 果味奔放）。程序拿这条路径去和配方库做匹配（[src/utils/bar.ts](src/utils/bar.ts) 里的 `matchByQuiz`）：
 
 - 结果**同时看两个维度**：**口味契合度**（你的选择与配方风味标签、酒精度有多接近）和**库存缺口**（还差几样材料）；
 - **材料齐全的酒**按契合度排在前面，最多展示 6 款，点卡片可进配方详情；
 - **还差一点的酒**单独列出来，并告诉你「补齐哪些就能解锁」；
 - **酒柜空着时**，结果页顶部会提示你先去备料。
 
-每道题的选项不是写死的分支，而是在 [src/data/quiz.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/data/quiz.ts) 里声明它对配方的偏好（喜欢哪些风味标签、排斥哪些标签、期望的酒精度档位）。所以**想调口味就改这个文件**，不用动页面逻辑。
+每道题的选项不是写死的分支，而是在 [src/data/quiz.ts](src/data/quiz.ts) 里声明它对配方的偏好（喜欢哪些风味标签、排斥哪些标签、期望的酒精度档位）。所以**想调口味就改这个文件**，不用动页面逻辑。
 
-> 「口味问答」和「一键生成」的区别：一键生成只按**库存**排（能调的排前面）；口味问答则叠加了**你的主观偏好**，把「最想喝的」排前面。两者用的是同一份配方库和同一套匹配打分。
+> 你的答卷也会被保存下来（`homebar-quiz-v1`），作为**口味画像的冷启动先验** —— 在你还没积累调酒记录时，它能先给出一个大致方向（见[第 6 节](#6-推荐系统越用越懂你)）。
+
+> 「口味问答」和「一键生成」的区别：一键生成只按**库存**排（能调的排前面）；口味问答则叠加了**你的主观偏好**，把「最想喝的」排前面。两者用的是同一份配方库和同一套打分，也都会再叠加口味画像做个性化。
 
 ### 界面是怎么写的
 
@@ -478,7 +506,7 @@ src/pages/bar/
 
 ### 数据是怎么共享的
 
-所有页面共享的数据（勾选了哪些酒、有哪些自定义原料、调过哪些酒、昵称头像）统一放在 [src/store/useBarStore.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/store/useBarStore.ts) 里，用的是 `zustand` 这个库。
+所有页面共享的数据（勾选了哪些酒、有哪些自定义原料、调过哪些酒、昵称头像）统一放在 [src/store/useBarStore.ts](src/store/useBarStore.ts) 里，用的是 `zustand` 这个库。
 
 在任何页面里这样拿到数据：
 
@@ -488,13 +516,74 @@ const { inv, toggle } = useBarStore()
 // toggle：切换某个材料的勾选状态
 ```
 
-好处：你在 Wine Cabinet 页勾选的材料，切到 Bar 页会**立刻生效**（顶部「能调几款」的数字随之变化），Me 页和 Recipe 页读的也是同一份数据。
+好处：你在 Wine Cabinet 页勾选的材料，切到 Bar 页会**立刻生效**（酒单自动重算），Me 页和 Recipe 页读的也是同一份数据。
 
 ---
 
-## 6. 常见修改：加一款配方
+## 6. 推荐系统：越用越懂你
 
-假设你想加一款「威士忌可乐（Whiskey Coke）」，只需要改一个文件：[src/data/recipes.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/data/recipes.ts)。
+前面说过，App 会「越用越懂你」。这一节讲它是怎么做到的 —— 理解之后，你就能自己调它的「口味脾气」。
+
+### 它从哪里学习
+
+| 你的行为 | 它学到什么 | 强度 |
+| --- | --- | --- |
+| 调完一杯并打**好评** | 这道酒的风味、酒精度、基酒，你都喜欢 | 最强正向（+2） |
+| 打**一般** | 轻微正向 | 弱（+0.5） |
+| 打**差评** | 这道酒本身、以及它的风味方向，以后少推 | 最强负向（−2，且该配方再额外压制） |
+| 只做了没评分 | 轻微正向（默认不讨厌） | 弱（+0.5） |
+| 点开看过某配方详情 | 隐式正向（你至少感兴趣） | 很弱（+0.2，最多累计 3 次） |
+| 口味问卷答卷 | 冷启动先验，先给个大致方向 | 中等 |
+
+这些行为会被汇总成一份**口味画像** `TasteProfile`（代码在 [src/utils/taste.ts](src/utils/taste.ts)），包含三部分：
+
+- **风味标签偏好**：如 `清爽 +0.8`、`甜润 −0.6`；
+- **酒精度偏好**：无酒精 / 低度 / 中度 / 高度 四档各自的偏好；
+- **基酒偏好**：如 `gin +1.0`、`white_rum −0.15`。
+
+> 画像的两个细节：**越新的行为权重越大**（老习惯会慢慢淡出）；所有数值都**归一化到 −1~1**，所以你喝得再多也不会把权重撑爆。
+
+### 推荐是怎么算出来的
+
+给每一款「用现有库存能调」的酒打一个总分（实现在 [src/utils/taste.ts](src/utils/taste.ts) 的 `scoreTaste`）：
+
+```text
+总分 = 标签契合 × 1.0
+     + 度数契合 × 0.6
+     + 基酒契合 × 0.4      （只算正向：不喜欢的基酒不额外扣分）
+     + 新鲜度              （没喝过 +0.4；做过 −0.3）
+     + 好评加权            （打过好评再 +1.7）
+     + 差评压制            （打过差评再 −1.5）
+```
+
+上面的权重被抽成了一行一个的常量（`K_TAG` / `K_STRENGTH` / `K_BASE` / `BONUS_NOVEL` / `PENALTY_MADE` / `LIKED_BONUS` / `DISLIKED_PENALTY`），改它们就能改推荐性格。
+
+### 前几名是怎么「排」出来的
+
+光按分数排，容易前几张全是同一种口味。所以结果区的**前 3 席**会被特殊调度（[src/utils/bar.ts](src/utils/bar.ts) 的 `arrangeExplore`）：
+
+1. **第 1 位**：总分最高；
+2. **回归位**：你做过的、且打过好评里分最高的那款（保证「心头好」露脸）；
+3. **探索位**：没喝过、但口味契合的那款（保证有新鲜感）；
+4. 三者**尽量错开基酒**，避免前三张全是金酒底。
+
+剩下的位置，一律严格按总分排序。
+
+### 卡片下面那行小字
+
+卡片上那行 `✧ 因为 清爽`、`✧ 没喝过，试个新鲜`、`✧ 你上次给了好评` 就是它的**判断理由**，来自 `scoreTaste` 返回的 `reasons`。看这些字，就能大致猜出它为什么这么排。
+
+### 新用户（冷启动）
+
+你还没调过任何酒时，画像全为 0，排序会**退回按热度（`pop`）排**，和没有推荐系统时一样 —— 不会乱推。答过问卷的话，用问卷结果给一个初始方向。
+
+> 想调权重、看排序细节，用 [第 10 节](#10-开发工具与测试) 的 `npm run rec:demo`。
+
+---
+
+## 7. 常见修改：加一款配方
+
+假设你想加一款「威士忌可乐（Whiskey Coke）」，只需要改一个文件：[src/data/recipes.ts](src/data/recipes.ts)。
 
 在数组 `RECIPES` 里加一条（照着已有的格式抄）：
 
@@ -526,7 +615,7 @@ const { inv, toggle } = useBarStore()
 **注意两点：**
 
 1. `id` 必须唯一，且强烈建议只使用英文小写字母和下划线。
-2. `ingredients` 里的 `item` 必须是 [src/data/categories.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/data/categories.ts) 里已经存在的材料 id（比如 `whiskey`、`cola`、`lemon`）。如果材料清单里没有，就去 `CATS` 里先补一条：
+2. `ingredients` 里的 `item` 必须是 [src/data/categories.ts](src/data/categories.ts) 里已经存在的材料 id（比如 `whiskey`、`cola`、`lemon`）。如果材料清单里没有，就去 `CATS` 里先补一条：
 
 ```ts
 ['whiskey', '威士忌'],   // [id, 显示给用户看的中文名]
@@ -536,25 +625,29 @@ const { inv, toggle } = useBarStore()
 
 ---
 
-## 7. 数据存在哪里
+## 8. 数据存在哪里
 
 **好消息：本项目不需要服务器，也基本不需要数据库，直接就能跑。**
 
 - 你在界面上勾选的酒柜、自定义原料、调酒记录、昵称头像，都通过 `Taro.getStorageSync` / `Taro.setStorageSync` **保存在手机（或浏览器）本地**，关掉再打开还在。
-- 存储的读写封装在 [src/store/useBarStore.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/store/useBarStore.ts) 顶部的 `readJSON` / `writeJSON` 里。
+- 存储的读写封装在 [src/store/useBarStore.ts](src/store/useBarStore.ts) 顶部的 `readJSON` / `writeJSON` 里。
 - 每一项都用了一个固定的 key，例如：
   - `homebar-inv-v1`：酒柜库存（在 Wine Cabinet 页维护，Bar 页只读）
   - `homebar-custom-v1`：自定义原料
-  - `homebar-records-v1`：调酒记录
+  - `homebar-records-v1`：调酒记录（评分 / 心得 / 照片）
   - `homebar-profile-v1`：昵称头像
+  - `homebar-quiz-v1`：口味问卷答卷（口味画像的冷启动先验）
+  - `homebar-views-v1`：配方浏览计数（隐式反馈，喂给口味画像）
 
-> [src/services/cloud.ts](file:///Users/yaohui/yaohui-workspace/homebar-miniprogram/src/services/cloud.ts) 是预留给「微信云开发」的调用封装：在小程序里会走云函数，在网页版会自动读取 `src/data/` 里的模拟数据。当前版本的功能并不依赖它，所以你不配置云开发也能完整体验。
+> 口味画像 `TasteProfile` 本身**不单独存储**，而是每次由上面这些原始数据实时推导（见 [src/utils/taste.ts](src/utils/taste.ts) 的 `buildTasteProfile`），所以永远和你的真实行为保持一致。
+
+> [src/services/cloud.ts](src/services/cloud.ts) 是预留给「微信云开发」的调用封装：在小程序里会走云函数，在网页版会自动读取 `src/data/` 里的模拟数据。当前版本的功能并不依赖它，所以你不配置云开发也能完整体验。
 
 **清空本地数据的办法**：在微信开发者工具里点「清缓存 → 清除数据缓存」，或在浏览器里清掉该站点的本地存储。
 
 ---
 
-## 8. 常见问题排查
+## 9. 常见问题排查
 
 | 现象 | 可能原因 & 解决 |
 | --- | --- |
@@ -564,7 +657,53 @@ const { inv, toggle } = useBarStore()
 | 微信开发者工具里一片空白 / 报错 | 先确认 `npm run dev:weapp` 正在运行且没有报错；再确认导入的**项目目录是项目根目录**，而不是 `dist`。 |
 | 改了代码小程序没反应 | 确认 `dev:weapp` 的终端没有退出；在开发者工具里点一下「编译」。 |
 | H5 和小程序表现不一样 | 正常现象。两个平台底层不同，代码里用 `process.env.TARO_ENV === 'h5'` 做了少量兼容处理。 |
-| 想看某段逻辑在哪 | 直接搜关键词。核心算法在 `src/utils/bar.ts`，数据在 `src/data/`，页面在 `src/pages/`。 |
+| 想看某段逻辑在哪 | 直接搜关键词。生成与调度在 `src/utils/bar.ts`，推荐画像在 `src/utils/taste.ts`，数据在 `src/data/`，页面在 `src/pages/`（二级页在 `src/subpages/`）。 |
+| 推荐结果不符合预期 | 先用 `npm run rec:demo` 离线复现排序（见[第 10 节](#10-开发工具与测试)），改 `src/utils/taste.ts` 里的权重常量；改完跑 `npm run test:unit` 确认没把既有结论改坏。 |
+| 想清空"口味记忆"重来 | 清掉本地存储即可（见[第 8 节](#8-数据存在哪里)），推荐会退回冷启动状态。 |
+
+---
+
+## 10. 开发工具与测试
+
+这一节面向想**改推荐逻辑**的开发者。原始项目只要能跑起来就行，这部分是可选的。
+
+### 离线调试推荐排序：`npm run rec:demo`
+
+它用多组 mock 数据（不同口味、不同行为强度的"用户"）离线跑一遍推荐算法，把**排序结果**和**每款酒的分数拆解**打印出来，方便你在改权重时立刻看到影响。
+
+```bash
+npm run rec:demo              # 跑全部用例，默认只打印对比表
+npm run rec:demo -- 3         # 只跑第 3 个用例
+npm run rec:demo -- --list    # 列出所有用例
+npm run rec:demo -- 3 --log=info    # 额外打印调度 / 多样化决策日志
+npm run rec:demo -- 3 --log=debug   # 最详细：逐卡、逐材料的打分过程
+```
+
+输出里每款酒后面的 `拆解(标签/度/基/新/好/差)` 就是它的分数构成，例如：
+
+```text
+01 汤姆柯林斯  S2 底:gin  缺0 ★回归位·好评 [做过]  ← 你上次给了好评
+     拆解(标签2.95/度0.60/基0.40/新-0.30/好1.70/差0.00)=5.35
+```
+
+用例定义在 [scripts/rec-demo.ts](scripts/rec-demo.ts)，想加自己的"用户画像"就往 `SCENARIOS` 数组里加一条；其中带 `expect` 的用例会做**目标校验**（打印 `✅` / `❌`）。
+
+### 单元测试：`npm run test:unit`
+
+```bash
+npm run test:unit
+```
+
+用 Node 内置的测试运行器（`node:test`），**不需要额外安装任何东西**。测试分四层：
+
+| 文件 | 覆盖 |
+| --- | --- |
+| [tests/taste.test.ts](tests/taste.test.ts) | 口味画像构建、打分、归一化、时间衰减、基酒/好评/差评 |
+| [tests/bar.test.ts](tests/bar.test.ts) | 库存匹配、前 3 席调度、冷启动退化、待补齐清单排序 |
+| [tests/logger.test.ts](tests/logger.test.ts) | 分级日志的级别过滤 |
+| [tests/personas.test.ts](tests/personas.test.ts) | 甜食党 / 低度党 / 苛刻用户 / 只浏览用户等群体 + 全局不变量 |
+
+公共测试数据在 [tests/fixtures.ts](tests/fixtures.ts)。**改完推荐权重，务必跑一遍 `test:unit`**，其中包含一条"回归锁"（好事先定好的排序结论），防止不小心改坏已有行为。
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "taro_template",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "private": true,
   "description": "taro_template",
   "templateInfo": {
@@ -27,7 +27,9 @@
     "dev:rn": "npm run build:rn -- --watch",
     "dev:qq": "npm run build:qq -- --watch",
     "dev:jd": "npm run build:jd -- --watch",
-    "dev:quickapp": "npm run build:quickapp -- --watch"
+    "dev:quickapp": "npm run build:quickapp -- --watch",
+    "rec:demo": "TS_NODE_PROJECT=scripts/tsconfig.json ts-node -r tsconfig-paths/register scripts/rec-demo.ts",
+    "test:unit": "TS_NODE_PROJECT=tests/tsconfig.json node --require ts-node/register --require tsconfig-paths/register --test tests/taste.test.ts tests/bar.test.ts tests/logger.test.ts tests/personas.test.ts"
   },
   "browserslist": [
     "last 3 versions",
